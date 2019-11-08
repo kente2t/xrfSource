@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="608.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se.e2t.xraygui.XraySourceGuiMainController">
+  <children>
+    <MenuBar fx:id="_menuBar" prefWidth="894.0" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#openSelected" text="Open…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" onAction="#saveSelected" text="Save" />
+            <MenuItem mnemonicParsing="false" onAction="#saveAsSelected" text="Save As…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" onAction="#quitSelected" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#aboutProgramSelected" text="About XraySource" />
+          </items>
+        </Menu>
+      </menus>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+    </MenuBar>
+      <GridPane maxWidth="-Infinity" prefHeight="725.0" prefWidth="400.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="30.0" minHeight="0.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="200.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Tube anode element:" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="_anodeList" onKeyPressed="#tubeAnodeKeyPressed" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></ChoiceBox>
+            <Label text="Electron incident angle:" GridPane.rowIndex="2" />
+            <TextField fx:id="_inangle" onAction="#angle_in" onKeyPressed="#angle_in_key_pressed" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="Photon exiting angle:" GridPane.rowIndex="3" />
+            <TextField fx:id="_xrayOutAngle" onAction="#angleOut" onKeyPressed="#angleOutKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="Tube window element:" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="_tubeWindowElement" onKeyPressed="#tubeWindowElementKeyPressed" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></ChoiceBox>
+            <Label text="Tube window thickness (mym)" GridPane.rowIndex="5" />
+            <TextField fx:id="_windowThickness" onAction="#windowThicknessAction" onKeyPressed="#windowThicknessKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <FlowPane alignment="CENTER_LEFT" orientation="VERTICAL" prefHeight="150.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="6">
+               <children>
+                  <Label text="Tube filter (element(s):" />
+                  <Button fx:id="_modifyFilterButton" mnemonicParsing="false" onAction="#modifyFilterButtonPressed" onKeyPressed="#modifyFilterKeyPressed" text="Modify tube filter" />
+                  <Button fx:id="_removeFilterButton" mnemonicParsing="false" onAction="#removeFilterButtonPressed" text="Remove filter elements" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </FlowPane>
+            <TableView fx:id="_filterTable" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+              <columns>
+                <TableColumn fx:id="_elementColumn" maxWidth="400.0" prefWidth="75.0" text="Element" />
+                <TableColumn fx:id="_percentColumn" maxWidth="400.0" prefWidth="100.0" text="Percentage" />
+              </columns>
+               <opaqueInsets>
+                  <Insets top="10.0" />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin>
+            </TableView>
+            <Label text="Tube filter thickness (mym):" GridPane.rowIndex="7" />
+            <TextField fx:id="_filterThickness" onAction="#filterThicknessAction" onKeyPressed="#filterThicknessKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="Tube voltage (kV):" GridPane.rowIndex="8" />
+            <TextField fx:id="_tubeVoltage" onAction="#tubeVoltageAction" onKeyPressed="#tubeVoltageKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="X-ray continium interval size (Å):" GridPane.rowIndex="9" />
+            <TextField fx:id="_continiumSlice" onAction="#continiumSliceAction" onKeyPressed="#continiumSliceKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="X-ray continium max wavelength (Å):" GridPane.rowIndex="10" />
+            <TextField fx:id="_maxWavelength" onAction="#maxWavelengthAction" onKeyPressed="#maxWavelengthKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+            <Label text="Spectrum calculation algorith:m" GridPane.rowIndex="11" />
+            <ChoiceBox fx:id="_algSelection" onKeyPressed="#algSelectKeyPressed" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></ChoiceBox>
+            <Button fx:id="_generateFileButton" mnemonicParsing="false" onAction="#generateFileButtonAction" onKeyPressed="#generateFileButtonKeyPressed" text="Generate tube spectrum file" GridPane.columnIndex="1" GridPane.rowIndex="12">
+               <GridPane.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </GridPane.margin></Button>
+         </children>
+         <opaqueInsets>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </VBox.margin>
+      </GridPane>
+  </children>
+</VBox>

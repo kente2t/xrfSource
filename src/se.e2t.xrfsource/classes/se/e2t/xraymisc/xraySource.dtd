@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/xraySource.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE XraySourceParameters SYSTEM "xraySource.dtd">
+
+    <XraySourceParameters>
+    ...
+    </XraySourceParameters>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT XraySourceParameters (AnodeElement|WindowElement|FilterElements|Algorithm)*>
+<!ATTLIST XraySourceParameters
+    programVersion CDATA #IMPLIED
+    inAngle CDATA #IMPLIED
+    outAngle CDATA #IMPLIED
+    windowThickness CDATA #IMPLIED
+    filterThickness CDATA #IMPLIED
+    anodeVoltage CDATA #IMPLIED
+    intervalSize CDATA #IMPLIED
+    maxWavelength CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT AnodeElement EMPTY>
+<!ATTLIST AnodeElement
+    symbol CDATA #IMPLIED
+    atomicNumber CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT WindowElement EMPTY>
+<!ATTLIST WindowElement
+    symbol CDATA #IMPLIED
+    atomicNumber CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT FilterElements (FilterElement)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT FilterElement EMPTY>
+<!ATTLIST FilterElement
+    symbol CDATA #IMPLIED
+    atomicNumber CDATA #IMPLIED
+    conc CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT Algorithm EMPTY>
+<!ATTLIST Algorithm
+    index CDATA #IMPLIED
+    description CDATA #IMPLIED
+  >
