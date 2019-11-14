@@ -51,7 +51,7 @@ public class LineWidths {
     // Width of L3 level width plus mean of M4 and M5 widths
     static {
         L_ALPHA_12_LINEWIDTH = new HashMap<>();
-        L_ALPHA_12_LINEWIDTH.put(45, 1.96d + (0.21d + 0.21d) / 2.0d);
+        L_ALPHA_12_LINEWIDTH.put(45, 1.96d + (0.61d + 0.21d) / 2.0d);
         L_ALPHA_12_LINEWIDTH.put(74, 4.81d + (1.7d + 1.7d) / 2.0d);
     }
     ;
@@ -134,7 +134,7 @@ public class LineWidths {
     static {
         L_ETA_LINEWIDTH = new HashMap<>();
         L_ETA_LINEWIDTH.put(45, 2.13d + 7.2d + (8.0d - 7.2d) / 2.0d);
-        L_ETA_LINEWIDTH.put(74, 4.82d + 13.8d + (5.0d / 8.0d) * (14.8 - 13.8));
+        L_ETA_LINEWIDTH.put(74, 4.82d + 13.8d + (5.0d / 8.0d) * (14.8d - 13.8d));
     }
 
     private static final Map<Integer, Double> L_GAMMA_1_LINEWIDTH;
@@ -160,6 +160,7 @@ public class LineWidths {
     // Width of L1 plus N2 width
     static {
         L_GAMMA_2_LINEWIDTH = new HashMap<>();
+        L_GAMMA_2_LINEWIDTH.put(45, 4.0d + 4.2d);
         L_GAMMA_2_LINEWIDTH.put(74, 6.3d + 5.8d);
     }
 

@@ -44,6 +44,7 @@ import static se.e2t.xraycalc.Inparameters.getAlgorithms;
 import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import static se.e2t.xraycalc.Inparameters.getWindowElements;
 import se.e2t.xraycalc.NistCalculation;
+import se.e2t.xraycalc.SourceCalculation;
 import se.e2t.xraycalc.SpectrumFileWriter;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 import se.e2t.xraymisc.OpenSaveParameters;
@@ -480,7 +481,7 @@ public class XraySourceGuiMainController implements Initializable {
         int index = _algSelection.getSelectionModel().getSelectedIndex();
         switch (index) {
             case 0: //NIST algorithm
-                outputData = new NistCalculation().calculate(_inParameters);
+                outputData = new NistCalculation().calculate(_inParameters);     
                 break;
             default:
                 Toolkit.getDefaultToolkit().beep();
@@ -512,7 +513,7 @@ public class XraySourceGuiMainController implements Initializable {
         if (!loader.iterator().hasNext()) {
             Toolkit.getDefaultToolkit().beep();
             alert = new Alert(Alert.AlertType.ERROR,
-                    "No spcetrum data formatter was found!");
+                    "No spectrum data formatter was found!");
             alert.setHeaderText(null);
             alert.showAndWait();
             return;

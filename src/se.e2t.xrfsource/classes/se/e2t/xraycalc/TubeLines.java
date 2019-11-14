@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import se.e2t.xraycalc.LineEnergies;
+import se.e2t.xraycalc.TubeLines.LineInfo;
 
 /**
  *
@@ -16,11 +17,6 @@ import se.e2t.xraycalc.LineEnergies;
  */
 public class TubeLines {
     
-//    public static enum Lline {
-//        L_ALPHA_1, L_ALPHA_2, L_BETA_2, L_IOTA, L_BETA_1, L_BETA_3, L_BETA_4,
-//        L_ETA, L_GAMMA_1, L_GAMMA_3, L_GAMMA_2, L_BETA_5, L_BETA_6
-//    };
-
     public static enum XrfLine {
         K_ALPHA_12, K_BETA_1, L_ALPHA_12, L_BETA_1, M_ALPHA_12,
          L_ALPHA_1, L_ALPHA_2, L_BETA_2, L_IOTA, L_BETA_3, L_BETA_4,
@@ -192,10 +188,12 @@ public class TubeLines {
         TUBE_LINE_INFO.put(XrfLine.M_ALPHA_12, M_ALPHA_12_LINE);
     }
     
-    public TubeLines() {
+    // This class has just static methods and is never instatiated-
+    // Data is therefore loaded into the data structues by this initializer.
+    
+    static {
 
         //Initialize major line data
-        
         TUBE_LINE_INFO.keySet().stream()
                 .forEach(xrfLine -> {
                     getAnodeElements().stream()
@@ -212,9 +210,8 @@ public class TubeLines {
                                             AbsorptionEdges.getEdge(atomZ, xrfLine).get()))
                             );
                 });
-        
+
         // Initialize data of L lines
-        
         TUBE_L_LINE_INFO.keySet().stream()
                 .forEach(xrfLine -> {
                     getAnodeElements().stream()
@@ -230,6 +227,34 @@ public class TubeLines {
                                             LineWidths.getTubeLineWidth(atomZ, xrfLine).get(),
                                             AbsorptionEdges.getEdge(atomZ, xrfLine).get()))
                             );
+                });
+        // Print data for verification purposes
+
+        System.out.println("TUBE_LINE_INFO");
+        TUBE_LINE_INFO.keySet().stream()
+                .forEach(xrfLine -> {
+                    System.out.println("\n" + xrfLine.toString());
+                    TUBE_LINE_INFO.get(xrfLine).keySet().stream()
+                            .forEach(atomZ -> {
+                                LineInfo lInfo = TUBE_LINE_INFO.get(xrfLine).get(atomZ);
+                                System.out.println(atomZ + " "
+                                        + String.format("%.3f", lInfo.getEnergy()) + " "
+                                        + String.format("%.2f", lInfo.getLineWidth()) + " "
+                                        + String.format("%.3f", lInfo.getAbsorptionEdge()));
+                            });
+                });
+        System.out.println("\nTUBE_L_LINE_INFO");
+        TUBE_L_LINE_INFO.keySet().stream()
+                .forEach(xrfLine -> {
+                    System.out.println("\n" + xrfLine.toString());
+                    TUBE_L_LINE_INFO.get(xrfLine).keySet().stream()
+                            .forEach(atomZ -> {
+                                LineInfo lInfo = TUBE_L_LINE_INFO.get(xrfLine).get(atomZ);
+                                System.out.println(atomZ + " "
+                                        + String.format("%.3f", lInfo.getEnergy()) + " "
+                                        + String.format("%.2f", lInfo.getLineWidth()) + " "
+                                        + String.format("%.3f", lInfo.getAbsorptionEdge()));
+                            });
                 });
     }
 

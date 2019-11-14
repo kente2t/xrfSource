@@ -22,7 +22,6 @@ public class Guistart extends Application {
     public static final String PROG_VER = "2.0.0";
     public static final String PROG_TITLE_STRING = " - XraySource";
     private Inparameters _inParameters;
-    private TubeLines _tubeLines;
     private Stage _primaryStage;
     private XraySourceGuiMainController _primaryController;
     
@@ -45,9 +44,9 @@ public class Guistart extends Application {
         
         _inParameters = new Inparameters();
         
-        // Create object that stores data of the tube xrf lines
+        // Force static initializer of TubeLInes to be run
         
-        _tubeLines = new TubeLines();
+        Class.forName("se.e2t.xraycalc.TubeLines");
         
         // Load FXML file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/se/e2t/resources/xraySourceGuiMain.fxml"));
@@ -77,12 +76,6 @@ public class Guistart extends Application {
     public Inparameters getInparameters() {
         return _inParameters;
     }
-
-    public TubeLines getTubeLines() {
-        return _tubeLines;
-    }
-    
-    
 
     public XraySourceGuiMainController getPrimaryController() {
         return _primaryController;

@@ -5,14 +5,8 @@ package se.e2t.xraycalc;
 
 import se.e2t.abscoeffcalculate.AbsCoefficient;
 import se.e2t.abscoeffcalculate.Mucal;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import se.e2t.xraycalc.TubeLines.LineInfo;
-import se.e2t.xraycalc.TubeLines.XrfLine;
 import se.e2t.xrfsource.spectrumclasses.SpectrumPart;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 

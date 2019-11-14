@@ -43,7 +43,7 @@ public class LineEnergies {
     // Mean of L3-M4 and L3-M5
     static {
         L_ALPHA_12_LINE_ENERGY = new HashMap<>();
-        L_ALPHA_12_LINE_ENERGY.put(45, (2.693d + 2.697d) / 2.0d);
+        L_ALPHA_12_LINE_ENERGY.put(45, (2.692d + 2.697d) / 2.0d);
         L_ALPHA_12_LINE_ENERGY.put(74, (8.335d + 8.398d) / 2.0d);
     }
     ;
