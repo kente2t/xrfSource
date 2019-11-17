@@ -164,7 +164,7 @@ public abstract class SourceCalculation {
         // Calculate tube line intensities
         calculateTubeLineIntensities(
                 inParameters, outputData,
-                TubeLines.GetMajorLineInfo());
+                TubeLines.getMajorLineInfo());
 
         // Adjust intensities depending on window and filter attenuation
         windowFilterAdjustment(inParameters, outputData);

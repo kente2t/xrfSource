@@ -176,7 +176,7 @@ public class NistCalculation extends SourceCalculation {
                     LineInfo lineInfo = tubeLineInfo.get(xrfLine).get(z);
                     // Get line wavelength
                     double wavelength = Inparameters.CONV_KEV_ANGSTROM
-                            / lineInfo.getEnergy();;
+                            / lineInfo.getEnergy();
                     // Calculate U0, the overvoltage ratio
                     double u0 = tubeVoltage / lineInfo.getAbsorptionEdge();
                     // Line exists if tube voltage is above absorption edge
@@ -264,8 +264,8 @@ public class NistCalculation extends SourceCalculation {
 
         // Calculate L_A12 f factor
         double lA12wavelength = Inparameters.CONV_KEV_ANGSTROM
-                / ((TubeLines.getLlineInfo(XrfLine.L_ALPHA_1, z).getEnergy()
-                + TubeLines.getLlineInfo(XrfLine.L_ALPHA_2, z).getEnergy()) / 2.0d);
+                / ((TubeLines.getLlineData(XrfLine.L_ALPHA_1, z).getEnergy()
+                + TubeLines.getLlineData(XrfLine.L_ALPHA_2, z).getEnergy()) / 2.0d);
 
         double fA12 = getPellaF(z, lA12wavelength, takeOffAngle, minWl);
 
@@ -288,7 +288,7 @@ public class NistCalculation extends SourceCalculation {
 
         // Calculate and store L line data
         //L_A1
-        LineInfo lInfo = TubeLines.getLlineInfo(XrfLine.L_ALPHA_1, z);
+        LineInfo lInfo = TubeLines.getLlineData(XrfLine.L_ALPHA_1, z);
         double wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         double lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         double intLa1Int = lA12Intensity / 1.1d; // This is the reference intensity 
@@ -299,7 +299,7 @@ public class NistCalculation extends SourceCalculation {
         double lA2int = 0.1d * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, lA2int / lineWidth));
         // L_B2
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_BETA_2, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_BETA_2, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         double fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
@@ -307,14 +307,14 @@ public class NistCalculation extends SourceCalculation {
         double lB2int = relP * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lB2int * fT) / lineWidth)));
         // L_L
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_IOTA, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_IOTA, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
         double lLint = 0.044d * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lLint * fT) / lineWidth)));
         // L_B1
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_BETA_1, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_BETA_1, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
@@ -322,7 +322,7 @@ public class NistCalculation extends SourceCalculation {
         double lB1int = relP * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lB1int * fT) / lineWidth)));
         // L_B3
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_BETA_3, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_BETA_3, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
@@ -330,21 +330,21 @@ public class NistCalculation extends SourceCalculation {
         double lB3int = relP * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lB3int * fT) / lineWidth)));
         // L_B4
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_BETA_4, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_BETA_4, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
         double lB4int = 0.626d * lB3int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lB4int * fT) / lineWidth)));
         // L_E
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_ETA, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_ETA, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
         double lEint = 0.024d * lB1int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lEint * fT) / lineWidth)));
         // L_G1
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_GAMMA_1, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_GAMMA_1, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
@@ -352,7 +352,7 @@ public class NistCalculation extends SourceCalculation {
         double lG1int = relP * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lG1int * fT) / lineWidth)));
         // L_G3
-        lInfo = TubeLines.getLlineInfo(XrfLine.L_GAMMA_3, z);
+        lInfo = TubeLines.getLlineData(XrfLine.L_GAMMA_3, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
