@@ -5,6 +5,7 @@ package se.e2t.xraycalc;
 
 import java.util.Map;
 import se.e2t.abscoeffcalculate.AbsCoefficient;
+import se.e2t.xraycalc.TubeLines.LineInfo;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 
 /**
@@ -29,7 +30,7 @@ public class EbelCalculation extends SourceCalculation {
     protected double getContiniumIntensity(Inparameters inParameters, double wavelength) {
         
         // dE in the contiuum intensity formula has been replaced by
-        // (1 / (wavelenght * wavelength)) * dLambda.
+        // (12.4 / (wavelenght * wavelength)) * dLambda.
         // and (E0/E - 1) has been replaced by (wavelength/wavelength0 -1).
         
         // Get tube anode atomic number
@@ -49,7 +50,7 @@ public class EbelCalculation extends SourceCalculation {
         double intensity = 1.35e9d * (double) z * 
                 Math.pow(((energy0 / energy) - 1.0d), xExponent) *
                 ((1.0d - Math.exp(-longExpression)) / (tauEj * longExpression)) *
-                1.0d / (wavelength * wavelength);
+                inParameters.CONV_KEV_ANGSTROM / (wavelength * wavelength);
         return intensity;
     }
     
@@ -70,8 +71,67 @@ public class EbelCalculation extends SourceCalculation {
     }
 
     @Override
-    protected void calculateTubeLineIntensities(Inparameters inParameters, XraySpectrum outputData, Map<TubeLines.XrfLine, Map<Integer, TubeLines.LineInfo>> tubeLineInfo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected void calculateTubeLineIntensities(Inparameters inParameters, XraySpectrum outputData,
+            Map<TubeLines.XrfLine, Map<Integer, TubeLines.LineInfo>> tubeLineInfo) {
+        
+        // Get tube target atomic number
+        int z = inParameters.getAnodeElement().getAtomicNumber();
+        double zD = (double) z;
+
+        // Calculate K line intensities according to Ebels first paper
+        
+        double energy0 = inParameters.getTubeVoltage();
+        
+        tubeLineInfo.keySet().stream()
+                .filter(xrfLine -> TubeLines.isKline(xrfLine))
+                .forEach(xrfLine -> {
+                    LineInfo lineInfo = tubeLineInfo.get(xrfLine).get(z);
+                    double wavelength = Inparameters.CONV_KEV_ANGSTROM /
+                            lineInfo.getEnergy();
+                    double edgeEnergy = lineInfo.getAbsorptionEdge();
+                     // Calculate U0, the overvoltage ratio
+                    double u0 = energy0 / edgeEnergy;
+                    // Line exists if tube voltage is above absorption edge
+                    if (u0 > 1) {
+                    // Calculate components of stopping power factor
+                    double firstParantesis = u0 * Math.log(u0) + 1.0d + u0;
+                    double bigRoot = Math.sqrt(0.0135d * (double) z / edgeEnergy);
+                    double nominator = Math.sqrt(u0) * Math.log(u0) + 2.0d * (1.0d - Math.sqrt(u0));
+                    double squareBracket = 1.0d + 16.05d * bigRoot * (nominator / firstParantesis);
+                    double sPowFactor = ((2.0d * 0.35d) / zD) * firstParantesis * squareBracket;
+                    // Calculate the f function
+                     double tau = AbsCoefficient.getThau(z, wavelength);
+        double sinPhi = Math.sin(inParameters.getInAngle() * Inparameters.ANGLE_CONV);
+        double sinEpsilon = Math.sin(inParameters.getOutAngle() * Inparameters.ANGLE_CONV);
+        double longExpression = tau * 2.0d *
+                getRouZ(inParameters.getTubeVoltage(), wavelength, z) *
+                sinPhi / sinEpsilon;
+        double fFunction = (1.0d - Math.exp(-longExpression)) / (tau * longExpression);
+        // Calculate r
+        double r = 1.0d - 0.0081517d * zD + 3.613e-5d * zD * zD +
+                0.009583d * zD * Math.exp(-u0) + 0.001141 * energy0;
+        double omegaJK = 
+                            }
+                
+                
+                
+                });
+                        
+        
+        double xExponent = 1.109d - (0.00435 * (double) z) + 0.00175 * energy0;
+        double tauEj = AbsCoefficient.getMassAbsCoefficient(z, wavelength);
+        double sinPhi = Math.sin(inParameters.getInAngle() * Inparameters.ANGLE_CONV);
+        double sinEpsilon = Math.sin(inParameters.getOutAngle() * Inparameters.ANGLE_CONV);
+        double longExpression = tauEj * 2.0d *
+                getRouZ(inParameters.getTubeVoltage(), wavelength, z) *
+                sinPhi / sinEpsilon;
+        double intensity = 1.35e9d * (double) z * 
+                Math.pow(((energy0 / energy) - 1.0d), xExponent) *
+                ((1.0d - Math.exp(-longExpression)) / (tauEj * longExpression)) *
+                inParameters.CONV_KEV_ANGSTROM / (wavelength * wavelength);
+        
+        
+        
     }
     
 }

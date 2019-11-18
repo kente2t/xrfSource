@@ -4,9 +4,26 @@
 package se.e2t.xraycalc;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import se.e2t.xraycalc.TubeLines.LineInfo;
+import static se.e2t.xraycalc.TubeLines.XrfLine.K_ALPHA_12;
+import static se.e2t.xraycalc.TubeLines.XrfLine.K_BETA_1;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_ALPHA_1;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_ALPHA_2;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_1;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_2;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_3;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_4;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_5;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_BETA_6;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_ETA;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_GAMMA_1;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_GAMMA_2;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_GAMMA_3;
+import static se.e2t.xraycalc.TubeLines.XrfLine.L_IOTA;
 
 /**
  *
@@ -21,6 +38,29 @@ public class TubeLines {
          L_ALPHA_1, L_ALPHA_2, L_BETA_2, L_IOTA, L_BETA_3, L_BETA_4,
         L_ETA, L_GAMMA_1, L_GAMMA_3, L_GAMMA_2, L_BETA_5, L_BETA_6
     };
+    
+    private static final Set<XrfLine> K_LINE_SET = new HashSet<>();
+    static {
+        K_LINE_SET.add(K_ALPHA_12);
+        K_LINE_SET.add(K_BETA_1);
+    }
+    
+    private static final Set<XrfLine> L_LINE_SET = new HashSet<>();
+    static {
+        L_LINE_SET.add(L_BETA_1);
+        L_LINE_SET.add(L_ALPHA_1);
+        L_LINE_SET.add(L_ALPHA_2);
+        L_LINE_SET.add(L_BETA_2);
+        L_LINE_SET.add(L_IOTA);
+        L_LINE_SET.add(L_ETA);
+        L_LINE_SET.add(L_BETA_3);
+        L_LINE_SET.add(L_BETA_4);
+        L_LINE_SET.add(L_GAMMA_1);
+        L_LINE_SET.add(L_GAMMA_3);
+        L_LINE_SET.add(L_GAMMA_2);
+        L_LINE_SET.add(L_BETA_5);
+        L_LINE_SET.add(L_BETA_6);
+    }
 
     private static final Map<Integer, LineInfo> K_ALPHA_12_LINE = new HashMap<>();
 
@@ -289,5 +329,21 @@ public class TubeLines {
     
     public static LineInfo getLlineData(XrfLine line, int z) {
         return TUBE_L_LINE_INFO.get(line).get(z);
+    }
+    
+    public static Set<XrfLine> getKlineSet() {
+        return K_LINE_SET;
+    }
+    
+    public static Set<XrfLine> getLlineSet() {
+        return L_LINE_SET;
+    }
+    
+    public static boolean isKline(XrfLine line) {
+        return K_LINE_SET.contains(line);
+    }
+    
+    public static boolean isLline(XrfLine line) {
+        return L_LINE_SET.contains(line);
     }
 }

@@ -50,4 +50,22 @@ public class AbsCoefficient {
             return Double.NaN;
         }
     }
+    
+    public static double getThau(int Z, double wavelength) {
+        double energy = Inparameters.CONV_KEV_ANGSTROM / wavelength;
+        Mucal mc = new Mucal(null, Z, energy, 'C', true);
+        ErrorCode ec = mc.calculate();
+        if (ec == Mucal.ErrorCode.within_edge) {
+            // Decrease energy 3 eV if to close to absorption edge
+            energy = energy - 0.003d;
+            mc.setEphot(energy);
+        }
+        ec = mc.calculate();
+
+        if (ec == ErrorCode.no_error) {
+            return mc.getXsec()[0];
+        } else {
+            return Double.NaN;
+        }
+    }
 }
