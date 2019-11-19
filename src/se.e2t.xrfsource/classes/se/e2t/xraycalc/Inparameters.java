@@ -5,6 +5,8 @@ package se.e2t.xraycalc;
 
 import java.util.ArrayList;
 import java.util.List;
+import static se.e2t.xraycalc.Inparameters.CalcModel.EBEL;
+import static se.e2t.xraycalc.Inparameters.CalcModel.NIST;
 
 /**
  *
@@ -31,7 +33,7 @@ public class Inparameters {
     private double _tubeVoltage;
     private double _continiumIntervalSize;
     private double _maxWavelength;
-    private int _algorithm;
+    private Algorithm _algorithm;
     
     private static final List<TubeElement> ANODE_ELEMENTS;
     static {
@@ -46,12 +48,15 @@ public class Inparameters {
         WINDOW_ELEMENTS.add(new TubeElement("Be", 4));
     }
     
-       private static final List<String> ALGORITHMS;
+     public static enum CalcModel {
+        NIST, EBEL
+    };
+    
+    private static final List<Algorithm> ALG_ALTERNATIVES;
     static {
-        ALGORITHMS = new ArrayList<>();
-        ALGORITHMS.add("NIST (Pella et al.)");
-        ALGORITHMS.add("ALG 2");
-        ALGORITHMS.add("ALG 3");
+        ALG_ALTERNATIVES = new ArrayList<>();
+        ALG_ALTERNATIVES.add(new Algorithm("NIST (Pella et al.)", NIST));
+        ALG_ALTERNATIVES.add(new Algorithm("Horst Ebels algorithms", EBEL));
     }
     
     public static final List<TubeElement> FILTER_ALTERNATIVES;
@@ -74,7 +79,7 @@ public class Inparameters {
         // Load default values
         
         _programVersion = THIS_PROGRAM_VERSION;
-        _algDescription = ALGORITHMS.get(0);
+        _algDescription = ALG_ALTERNATIVES.get(0).getDescription();
         _anodeElement.setAtomicNumber(ANODE_ELEMENTS.get(0).getAtomicNumber());
         _anodeElement.setSymbol(ANODE_ELEMENTS.get(0).getSymbol());
         _inAngle = 45.0d;
@@ -86,7 +91,7 @@ public class Inparameters {
         _tubeVoltage = 50.0d;
         _continiumIntervalSize = 0.1d;
         _maxWavelength = 12.0d;
-        _algorithm = 0;
+        _algorithm = getAlgorithms().get(0);
     }
 
     public static List<TubeElement> getAnodeElements() {
@@ -97,8 +102,8 @@ public class Inparameters {
         return WINDOW_ELEMENTS;
     }
     
-    public static List<String> getAlgorithms() {
-        return ALGORITHMS;
+    public static List<Algorithm> getAlgorithms() {
+        return ALG_ALTERNATIVES;
     }
     
     public static List<TubeElement> getFilterAlternatives() {
@@ -145,7 +150,7 @@ public class Inparameters {
         return _maxWavelength;
     }
 
-    public int getAlgorithm() {
+    public Algorithm getAlgorithm() {
         return _algorithm;
     }
 
@@ -187,7 +192,7 @@ public class Inparameters {
         this._maxWavelength = maxWavelength;
     }
 
-    public void setAlgorithm(int algorithm) {
+    public void setAlgorithm(Algorithm algorithm) {
         this._algorithm = algorithm;
     }
     
@@ -207,15 +212,6 @@ public class Inparameters {
         this._programVersion = programVersion;
     }
 
-    public String getAlgDescription() {
-        return _algDescription;
-    }
-
-    public void setAlgDescription(String algDescription) {
-        this._algDescription = algDescription;
-    }
-     
-     
     public static class TubeElement implements Cloneable {
     private String _symbol;
     private int _atomicNumber;
@@ -244,8 +240,23 @@ public class Inparameters {
     public void setAtomicNumber(int _atomicNumber) {
         this._atomicNumber = _atomicNumber;
     }
-    
 }
     
-    
+    public static class Algorithm {
+        private String _description;
+        private CalcModel _calcModel;
+        
+        public Algorithm(String description, CalcModel calcModel) {
+            _description = description;
+            _calcModel = calcModel;
+        }
+
+        public String getDescription() {
+            return _description;
+        }
+
+        public CalcModel getCalcModel() {
+            return _calcModel;
+        }
+    }
 }

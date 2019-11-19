@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.Optional;
 import javafx.scene.control.Alert;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,6 +30,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import se.e2t.xraycalc.FilterElement;
 import se.e2t.xraycalc.Inparameters;
+import se.e2t.xraycalc.Inparameters.Algorithm;
 
 /**
  * Class handles open and save of XraySource parameters from/to an XML file.
@@ -58,7 +60,7 @@ public class OpenSaveParameters {
     private static final String ATTR_CONC = "conc";
 
     private static final String ALGORITHM_ELEMENT_TAG = "Algorithm";
-    private static final String ATTR_INDEX = "index";
+    private static final String ATTR_CALCMODEL = "calcModel";
     private static final String ATTR_DESCRIPTION = "description";
 
     /**
@@ -364,14 +366,16 @@ public class OpenSaveParameters {
             Inparameters parameters) {
         // <Algorithm>
         // element.getValue();
+        parameters.setAlgorithm(Inparameters.getAlgorithms().get(0)); // Compatibility with version 1.0
         org.w3c.dom.NamedNodeMap attrs = element.getAttributes();
         for (int i = 0; i < attrs.getLength(); i++) {
             org.w3c.dom.Attr attr = (org.w3c.dom.Attr) attrs.item(i);
-            if (attr.getName().equals(ATTR_INDEX)) {
-                parameters.setAlgorithm(Integer.valueOf(attr.getValue()));
-            }
-            if (attr.getName().equals(ATTR_DESCRIPTION)) {
-                parameters.setAlgDescription(attr.getValue());
+            if (attr.getName().equals(ATTR_CALCMODEL)) {
+//                Algorithm alg = Inparameters.getAlgorithms().get(0);
+                Optional<Algorithm> alg = Inparameters.getAlgorithms().stream()
+                        .filter(algAlt -> algAlt.getCalcModel().toString().equals(attr.getValue()))
+                        .findFirst();
+                alg.ifPresent(algAlt -> parameters.setAlgorithm(algAlt));
             }
         }
         org.w3c.dom.NodeList nodes = element.getChildNodes();
@@ -486,9 +490,9 @@ public class OpenSaveParameters {
 
             // Add algorithm element info
             Element algElement = doc.createElement(ALGORITHM_ELEMENT_TAG);
-            algElement.setAttribute(ATTR_INDEX, String.valueOf(parameters.getAlgorithm()));
+            algElement.setAttribute(ATTR_CALCMODEL, parameters.getAlgorithm().getCalcModel().toString());
             algElement.setAttribute(ATTR_DESCRIPTION,
-                    Inparameters.getAlgorithms().get(parameters.getAlgorithm()));
+                    parameters.getAlgorithm().getDescription());
             root.appendChild(algElement);
 
             // Output the DOM object to a string and feed this string

@@ -51,7 +51,7 @@ public class AbsCoefficient {
         }
     }
     
-    public static double getThau(int Z, double wavelength) {
+    public static double getTau(int Z, double wavelength) {
         double energy = Inparameters.CONV_KEV_ANGSTROM / wavelength;
         Mucal mc = new Mucal(null, Z, energy, 'C', true);
         ErrorCode ec = mc.calculate();

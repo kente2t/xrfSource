@@ -39,8 +39,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import se.e2t.xraycalc.EbelCalculation;
 import se.e2t.xraycalc.Inparameters;
 import static se.e2t.xraycalc.Inparameters.getAlgorithms;
+import static se.e2t.xraycalc.Inparameters.Algorithm;
+import se.e2t.xraycalc.Inparameters.CalcModel;
 import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import static se.e2t.xraycalc.Inparameters.getWindowElements;
 import se.e2t.xraycalc.NistCalculation;
@@ -150,7 +153,7 @@ public class XraySourceGuiMainController implements Initializable {
         // Populate the calculation algorithm choicebox
         ObservableList<String> algAlt = FXCollections.observableArrayList();
         getAlgorithms().stream()
-                .forEach(algString -> algAlt.add(algString));
+                .forEach(alternative -> algAlt.add(alternative.getDescription()));
         _algSelection.setItems(algAlt);
 
         // Make first alternative selected
@@ -244,7 +247,7 @@ public class XraySourceGuiMainController implements Initializable {
         // Max wavelength
         _maxWavelength.setText(String.format("%.1f", parameters.getMaxWavelength()));
         // Calculation algorithm ChoiceList
-        _algSelection.getSelectionModel().select(parameters.getAlgorithm());
+        _algSelection.getSelectionModel().select(getAlgorithms().indexOf(parameters.getAlgorithm()));
     }
 
     // Listener for selections in the anode element choicebox
@@ -259,7 +262,7 @@ public class XraySourceGuiMainController implements Initializable {
 
     // Listener for selections in algoritm choicebox
     private void newAlgorithm(int oldIndex, int newIndex) {
-        _inParameters.setAlgorithm(newIndex);
+        _inParameters.setAlgorithm(getAlgorithms().get(newIndex));
     }
 
     // Handler executing when a new angle of ingoing electrons have been input
@@ -479,10 +482,13 @@ public class XraySourceGuiMainController implements Initializable {
         // Parameters are OK, use selected algorithm for the calculations
         XraySpectrum outputData = null;
         int index = _algSelection.getSelectionModel().getSelectedIndex();
-        switch (index) {
-            case 0: //NIST algorithm
+        CalcModel calcModel = getAlgorithms().get(index).getCalcModel();
+        switch (calcModel) {
+            case NIST: //NIST algorithm
                 outputData = new NistCalculation().calculate(_inParameters);     
                 break;
+            case EBEL:
+                outputData = new EbelCalculation().calculate(_inParameters);    
             default:
                 Toolkit.getDefaultToolkit().beep();
         }
