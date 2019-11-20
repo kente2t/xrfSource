@@ -14,9 +14,6 @@ import java.util.Optional;
  * Data of this static class are according to
  * 1. J.H. Scofield, Radiative Decay Rates of Vacancies in the K and L Shells,
  * Phys. Rev. vol. 179, no. 1, pp- 9-16, 1969.
- * Preliminary values are estimated from
- * M.G. Pia, P Saracco, M. Sudhakar, Validation of flourescence transition probability calculations,
- * arXiv:0912.1717v1 [physics.comp-ph] 9 Dec 2009.
 
  */
 public class TransProbabilities {
@@ -26,9 +23,13 @@ public class TransProbabilities {
     // Mean of probability of K-L2 and K-L3
     static {
         K_ALPHA_12_PROB = new HashMap<>();
-        K_ALPHA_12_PROB.put(24, (0.295d + 0.585d) / 2.0d);
-        K_ALPHA_12_PROB.put(45, (0.285d + 0.54d) / 2.0d);
-        K_ALPHA_12_PROB.put(74, (0.29d + 0.5d) / 2.0d);
+        K_ALPHA_12_PROB.put(24, (0.0563d + 0.1107 + (2.0d / 3.0d) *
+                (0.1003d - 0.0563d + 0.1967d - 0.1107d)) /
+                (0.1860d + (2.0d / 3.0d) * (0.332d - 0.1860d)));
+        K_ALPHA_12_PROB.put(45, (0.970d + 1.848d + (3.0d / 5.0d) *
+                (1.571d - 0.970d + 2.961d - 1.848d)) /
+                (3.33d + (3.0d / 5.0d) * (5.42d - 3.33d)));
+        K_ALPHA_12_PROB.put(74, (10.88d + 18.88d) / 37.4d);
     }
     ;
     
@@ -37,9 +38,13 @@ public class TransProbabilities {
     // Probability of K-M3
     static {
         K_BETA_1_PROB = new HashMap<>();
-        K_BETA_1_PROB.put(24, 0.07d); // Uncertain
-        K_BETA_1_PROB.put(45, 0.08d); // uncertain
-        K_BETA_1_PROB.put(74, 0.0105d);
+        K_BETA_1_PROB.put(24, (0.0126d + (2.0d / 3.0d) *
+                (0.0235d - 0.0126d)) /
+                (0.1860d + (2.0d / 3.0d) * (0.332d - 0.1860d)));
+        K_BETA_1_PROB.put(45, (0.2930d + (3.0d / 5.0d) *
+                (0.5017d - 0.2930d)) /
+                (3.33d + (3.0d / 5.0d) * (5.42d - 3.33d)));
+        K_BETA_1_PROB.put(74, 3.92d / 37.4d);
     }
     ;
     
@@ -48,8 +53,10 @@ public class TransProbabilities {
     // Mean of probability of L3-M4 and L3-M5
     static {
         L_ALPHA_12_PROB = new HashMap<>();
-        L_ALPHA_12_PROB.put(45, (0.09d + 0.75d) / 2.0d);
-        L_ALPHA_12_PROB.put(74, (0.08d + 0.7d) / 2.0d);
+        L_ALPHA_12_PROB.put(45, (0.0058d + 0.0513d + (3.0d / 5.0d) *
+                (0.0107d - 0.0058d + 0.0946d - 0.0513d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_ALPHA_12_PROB.put(74, (0.0102d + 0.898d) / 1.244d);
     }
     ;
     
@@ -67,8 +74,10 @@ public class TransProbabilities {
     // Probability of L3-M5
     static {
         L_ALPHA_1_PROB = new HashMap<>();
-        L_ALPHA_1_PROB.put(45, 0.75d);
-        L_ALPHA_1_PROB.put(74, 0.7d);
+        L_ALPHA_1_PROB.put(45, (0.0513d + (3.0d / 5.0d) *
+                (0.0946d - 0.0513d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_ALPHA_1_PROB.put(74, 0.898d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_ALPHA_2_PROB;
@@ -76,8 +85,10 @@ public class TransProbabilities {
     // Probability of L3-M4
     static {
         L_ALPHA_2_PROB = new HashMap<>();
-        L_ALPHA_2_PROB.put(45, 0.09d);
-        L_ALPHA_2_PROB.put(74, 0.08d);
+        L_ALPHA_2_PROB.put(45, (0.0058d + (3.0d / 5.0d) *
+                (0.0107d - 0.0058d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_ALPHA_2_PROB.put(74, 0.0102d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_BETA_2_PROB;
@@ -85,8 +96,10 @@ public class TransProbabilities {
     // Probability of L3-N5
     static {
         L_BETA_2_PROB = new HashMap<>();
-        L_BETA_2_PROB.put(45, 0.05d);
-        L_BETA_2_PROB.put(74, 0.14d);
+        L_BETA_2_PROB.put(45, (0.00173d + (3.0d / 5.0d) *
+                (0.0086d - 0.00173d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_BETA_2_PROB.put(74, 0.159d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_IOTA_PROB;
@@ -94,8 +107,10 @@ public class TransProbabilities {
     // Probability of L3-M1
     static {
         L_IOTA_PROB = new HashMap<>();
-        L_IOTA_PROB.put(45, 0.03d);
-        L_IOTA_PROB.put(74, 0.03d);
+        L_IOTA_PROB.put(45, (0.00217d + (3.0d / 5.0d) *
+                (0.0039d - 0.00217d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_IOTA_PROB.put(74, 0.047d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_BETA_1_PROB;
@@ -103,8 +118,10 @@ public class TransProbabilities {
     // Probability of L2-M4
     static {
         L_BETA_1_PROB = new HashMap<>();
-        L_BETA_1_PROB.put(45, 0.87d);
-        L_BETA_1_PROB.put(74, 0.83d);
+        L_BETA_1_PROB.put(45, (0.0595d + (3.0d / 5.0d) *
+                (0.1109d - 0.0595d)) /
+                (0.0638d + (3.0d / 5.0d) * (0.1253d - 0.0638d)));
+        L_BETA_1_PROB.put(74, 1.138d / 1.397d);
     }
 
     private static final Map<Integer, Double> L_BETA_3_PROB;
@@ -112,8 +129,10 @@ public class TransProbabilities {
     // Probability of L1-M3
     static {
         L_BETA_3_PROB = new HashMap<>();
-        L_BETA_3_PROB.put(45, 0.55d);
-        L_BETA_3_PROB.put(74, 0.45d);
+        L_BETA_3_PROB.put(45, (0.0222d + (3.0d / 5.0d) *
+                (0.0396d - 0.0222d)) /
+                (0.0412d + (3.0d / 5.0d) * (0.0761d - 0.0412d)));
+        L_BETA_3_PROB.put(74, 0.330d / 0.804d);
     }
 
     private static final Map<Integer, Double> L_BETA_4_PROB;
@@ -121,8 +140,10 @@ public class TransProbabilities {
     // Probability of L1-M2
     static {
         L_BETA_4_PROB = new HashMap<>();
-        L_BETA_4_PROB.put(45, 0.31d);
-        L_BETA_4_PROB.put(74, 0.3d);
+        L_BETA_4_PROB.put(45, (0.0129d + (3.0d / 5.0d) *
+                (0.0238d - 0.0129d)) /
+                (0.0412d + (3.0d / 5.0d) * (0.0761d - 0.0412d)));
+        L_BETA_4_PROB.put(74, 0.264d / 0.804d);
     }
 
     private static final Map<Integer, Double> L_ETA_PROB;
@@ -130,8 +151,10 @@ public class TransProbabilities {
     // Probability of L2-M1
     static {
         L_ETA_PROB = new HashMap<>();
-        L_ETA_PROB.put(45, 0.03d);
-        L_ETA_PROB.put(74, 0.025d);
+        L_ETA_PROB.put(45, (0.00188d + (3.0d / 5.0d) *
+                (0.0033d - 0.00188d)) /
+                (0.0638d + (3.0d / 5.0d) * (0.1253d - 0.0638d)));
+        L_ETA_PROB.put(74, 0.031d / 1.397d);
     }
 
     private static final Map<Integer, Double> L_GAMMA_1_PROB;
@@ -139,8 +162,10 @@ public class TransProbabilities {
     // Probability of L2-N4
     static {
         L_GAMMA_1_PROB = new HashMap<>();
-        L_GAMMA_1_PROB.put(45, 0.05d);
-        L_GAMMA_1_PROB.put(74, 0.15d);
+        L_GAMMA_1_PROB.put(45, (0.0020d + (3.0d / 5.0d) *
+                (0.0104d - 0.0020d)) /
+                (0.0638d + (3.0d / 5.0d) * (0.1253d - 0.0638d)));
+        L_GAMMA_1_PROB.put(74, 0.212d / 1.397d);
     }
 
     private static final Map<Integer, Double> L_GAMMA_3_PROB;
@@ -148,8 +173,10 @@ public class TransProbabilities {
     // Probability of L1-N3
     static {
         L_GAMMA_3_PROB = new HashMap<>();
-        L_GAMMA_3_PROB.put(45, 0.083d);
-        L_GAMMA_3_PROB.put(74, 0.11d);
+        L_GAMMA_3_PROB.put(45, (0.00349d + (3.0d / 5.0d) *
+                (0.0071d - 0.00349d)) /
+                (0.0412d + (3.0d / 5.0d) * (0.0761d - 0.0412d)));
+        L_GAMMA_3_PROB.put(74, 0.086d / 0.804d);
     }
 
     private static final Map<Integer, Double> L_GAMMA_2_PROB;
@@ -157,8 +184,10 @@ public class TransProbabilities {
     // Probabiulity of L1-N2
     static {
         L_GAMMA_2_PROB = new HashMap<>();
-        L_GAMMA_2_PROB.put(45, 0.08d); // uncertain
-        L_GAMMA_2_PROB.put(74, 0.09d);
+        L_GAMMA_2_PROB.put(45, (0.00201d + (3.0d / 5.0d) *
+                (0.0043d - 0.00201d)) /
+                (0.0412d + (3.0d / 5.0d) * (0.0761d - 0.0412d)));
+        L_GAMMA_2_PROB.put(74, 0.065d / 0.804d);
     }
 
     private static final Map<Integer, Double> L_BETA_5_PROB;
@@ -166,7 +195,7 @@ public class TransProbabilities {
     // Pobability of L3-O4 and L3-O5
     static {
         L_BETA_5_PROB = new HashMap<>();
-        L_BETA_5_PROB.put(74, 0.005d);
+        L_BETA_5_PROB.put(74, 0.0047d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_BETA_6_PROB;
@@ -174,8 +203,10 @@ public class TransProbabilities {
     // Probability of L3-N1
     static {
         L_BETA_6_PROB = new HashMap<>();
-        L_BETA_6_PROB.put(45, 0.006d); //uncertain
-        L_BETA_6_PROB.put(74, 0.008d);
+        L_BETA_6_PROB.put(45, (0.00037d + (3.0d / 5.0d) *
+                (0.00075d - 0.00037d)) /
+                (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
+        L_BETA_6_PROB.put(74, 0.102d / 1.244d);
     }
 
     private static final Map<TubeLines.XrfLine, Map<Integer, Double>> TRANS_PROB_DATA;
@@ -203,5 +234,17 @@ public class TransProbabilities {
 
     public static Optional<Double> getTransProb(int atomZ, TubeLines.XrfLine line) {
         return Optional.ofNullable(TRANS_PROB_DATA.get(line).get(atomZ));
+    }
+    
+    static {
+         TRANS_PROB_DATA.keySet().stream()
+                .forEach(xrfLine -> {
+                    System.out.println("\n" + xrfLine.toString());
+                    TRANS_PROB_DATA.get(xrfLine).keySet().stream()
+                            .forEach(atomZ -> {
+                                System.out.println(atomZ + " "
+                                        + String.format("%.3f", TRANS_PROB_DATA.get(xrfLine).get(atomZ)));
+                            });
+                });
     }
 }
