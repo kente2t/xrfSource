@@ -23,7 +23,7 @@ public class TransProbabilities {
     // Mean of probability of K-L2 and K-L3
     static {
         K_ALPHA_12_PROB = new HashMap<>();
-        K_ALPHA_12_PROB.put(24, (0.0563d + 0.1107 + (2.0d / 3.0d) *
+        K_ALPHA_12_PROB.put(24, (0.0563d + 0.1107d + (2.0d / 3.0d) *
                 (0.1003d - 0.0563d + 0.1967d - 0.1107d)) /
                 (0.1860d + (2.0d / 3.0d) * (0.332d - 0.1860d)));
         K_ALPHA_12_PROB.put(45, (0.970d + 1.848d + (3.0d / 5.0d) *
@@ -88,18 +88,18 @@ public class TransProbabilities {
         L_ALPHA_2_PROB.put(45, (0.0058d + (3.0d / 5.0d) *
                 (0.0107d - 0.0058d)) /
                 (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
-        L_ALPHA_2_PROB.put(74, 0.0102d / 1.244d);
+        L_ALPHA_2_PROB.put(74, 0.102d / 1.244d);
     }
 
     private static final Map<Integer, Double> L_BETA_2_PROB;
 
-    // Probability of L3-N5
+    // Probability of L3-N4 + L3-N5
     static {
         L_BETA_2_PROB = new HashMap<>();
-        L_BETA_2_PROB.put(45, (0.00173d + (3.0d / 5.0d) *
-                (0.0086d - 0.00173d)) /
+        L_BETA_2_PROB.put(45, (0.00020d + 0.00173d + (3.0d / 5.0d) *
+                (0.00098d - 0.00020d + 0.0086d - 0.00173d)) /
                 (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
-        L_BETA_2_PROB.put(74, 0.159d / 1.244d);
+        L_BETA_2_PROB.put(74, (0.0178d + 0.159d) / 1.244d);
     }
 
     private static final Map<Integer, Double> L_IOTA_PROB;
@@ -206,7 +206,7 @@ public class TransProbabilities {
         L_BETA_6_PROB.put(45, (0.00037d + (3.0d / 5.0d) *
                 (0.00075d - 0.00037d)) /
                 (0.0616d + (3.0d / 5.0d) * (0.1196d - 0.0616d)));
-        L_BETA_6_PROB.put(74, 0.102d / 1.244d);
+        L_BETA_6_PROB.put(74, 0.0112d / 1.244d);
     }
 
     private static final Map<TubeLines.XrfLine, Map<Integer, Double>> TRANS_PROB_DATA;

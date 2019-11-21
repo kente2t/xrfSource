@@ -149,9 +149,9 @@ public class NistCalculation extends SourceCalculation {
 
     @Override
     protected void calculateTubeLineIntensities(
-            Inparameters inParameters,
-            XraySpectrum outputData,
-            Map<TubeLines.XrfLine, Map<Integer, TubeLines.LineInfo>> tubeLineInfo) {
+            Inparameters inParameters, XraySpectrum outputData) {
+        
+        Map<TubeLines.XrfLine, Map<Integer, TubeLines.LineInfo>> tubeLineInfo = TubeLines.getMajorLineInfo();
 
         Map<TubeLines.XrfLine, NistInfo> nistPar = getNIST_PAR();
 

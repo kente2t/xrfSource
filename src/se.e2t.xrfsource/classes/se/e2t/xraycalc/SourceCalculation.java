@@ -162,9 +162,7 @@ public abstract class SourceCalculation {
         }
 
         // Calculate tube line intensities
-        calculateTubeLineIntensities(
-                inParameters, outputData,
-                TubeLines.getMajorLineInfo());
+        calculateTubeLineIntensities(inParameters, outputData);
 
         // Adjust intensities depending on window and filter attenuation
         windowFilterAdjustment(inParameters, outputData);
@@ -175,6 +173,7 @@ public abstract class SourceCalculation {
         return outputData;
     }
     
+    // This method is implemented by the classes extending this class
     protected abstract double getContiniumIntensity(Inparameters inParameters, double wavelength);
 
     private double getContiniumIntensityAveraged(Inparameters inParameters,
@@ -191,10 +190,10 @@ public abstract class SourceCalculation {
         return (aSum / (double) numAverage);
     }
     
+    // This method is implemented by the classes extending this class
     protected abstract void calculateTubeLineIntensities(
             Inparameters inParameters,
-            XraySpectrum outputData,
-            Map<TubeLines.XrfLine, Map<Integer, TubeLines.LineInfo>> tubeLineInfo);
+            XraySpectrum outputData);
     
     protected static double getLineWidth(double lineEnergy, double eWidth) {
         // get half of line width in keV
