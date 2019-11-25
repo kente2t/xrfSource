@@ -32,29 +32,42 @@ public class EbelCalculation extends SourceCalculation {
     }
 
     @Override
-    protected double getContiniumIntensity(Inparameters inParameters, double wavelength) {
+    protected double getContiniumIntensity(Inparameters inParameters,
+            double wavelength, double wavelengthWidth) {
 
-        // dE in the contiuum intensity formula has been replaced by
-        // (12.4 / (wavelenght * wavelength)) * dLambda.
-        // and (E0/E - 1) has been replaced by (wavelength/wavelength0 -1).
         // Get tube anode atomic number
         int z = inParameters.getAnodeElement().getAtomicNumber();
+        double zD = (double) z;
 
         // Calculate the x exponent
         double energy0 = inParameters.getTubeVoltage();
         double energy = Inparameters.CONV_KEV_ANGSTROM / wavelength;
-        double xExponent = 1.109d - (0.00435 * (double) z) + 0.00175 * energy0;
+        double xExponent = 1.109d - 0.00435d * zD + 0.00175d * energy0;
         double tauEj = AbsCoefficient.getTau(z, wavelength);
         double sinPhi = Math.sin(inParameters.getInAngle() * Inparameters.ANGLE_CONV);
         double sinEpsilon = Math.sin(inParameters.getOutAngle() * Inparameters.ANGLE_CONV);
-        double longExpression = tauEj * 2.0d
-                * getRouZ(inParameters.getTubeVoltage(), wavelength, z)
-                * sinPhi / sinEpsilon;
-        double intensity = 1.35e9d * (double) z
+        double rouZ = getRouZ(inParameters.getTubeVoltage(), wavelength, z);
+        double longExpression = tauEj * 2.0d * rouZ
+                * (sinPhi / sinEpsilon);
+        double deltaE = Inparameters.CONV_KEV_ANGSTROM / (wavelength - (wavelengthWidth / 2.0d)) -
+                Inparameters.CONV_KEV_ANGSTROM / (wavelength + (wavelengthWidth / 2.0d));
+        double intensity = 1.35e9d * zD
                 * Math.pow(((energy0 / energy) - 1.0d), xExponent)
-                * ((1.0d - Math.exp(-longExpression)) / (tauEj * longExpression))
-                * inParameters.CONV_KEV_ANGSTROM / (wavelength * wavelength);
-        return intensity;
+                * ((1.0d - Math.exp(-longExpression)) / longExpression)
+                * deltaE;
+//        System.out.println("energy0 = " + energy0);
+//        System.out.println("energy = " + energy);
+//        System.out.println("xExponent = " + xExponent);
+//        System.out.println("tauEj = " + tauEj);
+//        System.out.println("sinPhi = " + sinPhi);
+//        System.out.println("sinEpsilon = " + sinEpsilon);
+//        System.out.println("rouZ = " + rouZ);
+//        System.out.println("longExpression = " + longExpression);
+//        System.out.println("intensity = " + intensity);
+
+        
+        // Return a per Angstrom value
+        return intensity / wavelengthWidth;
     }
 
     /**
@@ -70,15 +83,16 @@ public class EbelCalculation extends SourceCalculation {
      */
     private double getRouZ(double tubeVoltage, double wavelength, int atomZ) {
 
-        double j = 0.0135d * (double) atomZ;
-        double rouZm = (AtomicWeights.getRelAtomicWeight(atomZ) / (double) atomZ)
+        double zD = (double) atomZ;
+        double j = 0.0135d * zD;
+        double rouZm = (AtomicWeights.getRelAtomicWeight(atomZ) / zD)
                 * (0.787e-5d * Math.sqrt(j) * Math.pow(tubeVoltage, 1.5d)
                 + 0.735e-6d * tubeVoltage * tubeVoltage);
-        double lnZ = Math.log((double) atomZ);
-        double m = 0.1382d - (0.9211d / Math.sqrt((double) atomZ));
+        double lnZ = Math.log(zD);
+        double m = 0.1382d - (0.9211d / Math.sqrt(zD));
         double eta = Math.pow(tubeVoltage, m) * (0.1904d - 0.2236d * lnZ
                 + 0.1292d * lnZ * lnZ - 0.0149d + lnZ * lnZ * lnZ);
-        double lnU0 = Math.log(tubeVoltage / (Inparameters.CONV_KEV_ANGSTROM / wavelength));
+        double lnU0 = Math.log((tubeVoltage / (Inparameters.CONV_KEV_ANGSTROM / wavelength)));
         double rouZ = rouZm * lnU0 * ((0.49269d - 1.0987d * eta + 0.78557d * eta * eta)
                 / (0.70256d - 1.09865d * eta + 1.0046d * eta * eta + lnU0));
         return rouZ;
@@ -88,7 +102,7 @@ public class EbelCalculation extends SourceCalculation {
     protected void calculateTubeLineIntensities(Inparameters inParameters,
             XraySpectrum outputData) {
 
-        // Create a temoprary storage for the lines
+        // Create a temporary storage for the lines
         List<SpectrumPart> allLines = new ArrayList<>();
 
         // Get tube target atomic number
@@ -131,13 +145,16 @@ public class EbelCalculation extends SourceCalculation {
                         double rouZ = getRouZ(inParameters.getTubeVoltage(),
                                 Inparameters.CONV_KEV_ANGSTROM / edgeEnergy, z);
                         double longExpression = tau * 2.0d * rouZ
-                                * sinPhi / sinEpsilon;
+                                * (sinPhi / sinEpsilon);
                         double fFunction = (1.0d - Math.exp(-longExpression)) / longExpression;
                         // Calculate r
                         double r = 1.0d - 0.0081517d * zD + 3.613e-5d * zD * zD
-                                + 0.009583d * zD * Math.exp(-u0) + 0.001141 * energy0;
+                                + 0.009583d * zD * Math.exp(-u0) + 0.001141d * energy0;
                         double omegaJK = FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).get();
                         double pJKL = TransProbabilities.getTransProb(z, xrfLine).get();
+                        System.out.println("l = " + xrfLine.toString() +
+                                " w = " + wavelength + " y = " + omegaJK +
+                                " p = " + pJKL);
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
@@ -180,13 +197,16 @@ public class EbelCalculation extends SourceCalculation {
                         double rouZ = getRouZ(inParameters.getTubeVoltage(),
                                 Inparameters.CONV_KEV_ANGSTROM / edgeEnergy, z);
                         double longExpression = tau * 2.0d * rouZ
-                                * sinPhi / sinEpsilon;
+                                * (sinPhi / sinEpsilon);
                         double fFunction = (1.0d - Math.exp(-longExpression)) / longExpression;
                         // Calculate r
                         double r = 1.0d - 0.0081517d * zD + 3.613e-5d * zD * zD
                                 + 0.009583d * zD * Math.exp(-u0) + 0.001141 * energy0;
                         double omegaJK = FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).get();
                         double pJKL = TransProbabilities.getTransProb(z, xrfLine).get();
+                        System.out.println("l = " + xrfLine.toString() +
+                                " w = " + wavelength + " y = " + omegaJK +
+                                " p = " + pJKL);
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
@@ -198,11 +218,13 @@ public class EbelCalculation extends SourceCalculation {
                                 constX = fCorr * 0.71e13d;
                                 break;
                             case L2_EDGE:
-                                constX = fCorr * 2.70E13d;
+                                constX = fCorr * 2.70e13d;
                         }
-                        // Convert line integrated intensity to per Angstrom value
-                        double intensity = (constX * sPowFactor * r * omegaJK * pJKL * fFunction) / lineWidth;
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity));
+                        // Calculate line intensity
+                        double intensity = constX * sPowFactor * r * omegaJK * pJKL * fFunction;
+                        
+                        // Store calculated intensity converted to a per angstrom value
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
                     }
                 });
         // Sort lines in wavelength order and add to output data

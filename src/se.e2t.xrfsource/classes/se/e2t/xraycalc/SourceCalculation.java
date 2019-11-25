@@ -55,7 +55,7 @@ public abstract class SourceCalculation {
         do {
             outputData.addContiniumSlice(
                     new SpectrumPart(centerWavelength, normalSlice,
-                            getContiniumIntensityAveraged(inParameters,
+                            getContiniumIntensity(inParameters,
                                     centerWavelength, normalSlice)));
             centerWavelength += normalSlice;
             sliceUpper += normalSlice;
@@ -68,7 +68,7 @@ public abstract class SourceCalculation {
             if (slice > MINIMUM_SLICE) {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, slice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, slice)));
             }
             // Restart at K edge
@@ -79,7 +79,7 @@ public abstract class SourceCalculation {
             do {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, normalSlice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, normalSlice)));
                 centerWavelength += normalSlice;
                 sliceUpper += normalSlice;
@@ -92,7 +92,7 @@ public abstract class SourceCalculation {
             if (slice > MINIMUM_SLICE) {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, slice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, slice)));
             }
             // Restart at L1 edge
@@ -104,7 +104,7 @@ public abstract class SourceCalculation {
                 do {
                     outputData.addContiniumSlice(
                             new SpectrumPart(centerWavelength, normalSlice,
-                                    getContiniumIntensityAveraged(inParameters,
+                                    getContiniumIntensity(inParameters,
                                             centerWavelength, normalSlice)));
                     centerWavelength += normalSlice;
                     sliceUpper += normalSlice;
@@ -118,7 +118,7 @@ public abstract class SourceCalculation {
             if (slice > MINIMUM_SLICE) {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, slice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, slice)));
             }
             // Restart at L2 edge
@@ -130,7 +130,7 @@ public abstract class SourceCalculation {
                 do {
                     outputData.addContiniumSlice(
                             new SpectrumPart(centerWavelength, normalSlice,
-                                    getContiniumIntensityAveraged(inParameters,
+                                    getContiniumIntensity(inParameters,
                                             centerWavelength, normalSlice)));
                     centerWavelength += normalSlice;
                     sliceUpper += normalSlice;
@@ -144,7 +144,7 @@ public abstract class SourceCalculation {
             if (slice > MINIMUM_SLICE) {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, slice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, slice)));
             }
             // Restart at L3 edge
@@ -154,7 +154,7 @@ public abstract class SourceCalculation {
             do {
                 outputData.addContiniumSlice(
                         new SpectrumPart(centerWavelength, normalSlice,
-                                getContiniumIntensityAveraged(inParameters,
+                                getContiniumIntensity(inParameters,
                                         centerWavelength, normalSlice)));
                 centerWavelength += normalSlice;
                 sliceUpper += normalSlice;
@@ -174,21 +174,22 @@ public abstract class SourceCalculation {
     }
     
     // This method is implemented by the classes extending this class
-    protected abstract double getContiniumIntensity(Inparameters inParameters, double wavelength);
+    protected abstract double getContiniumIntensity(Inparameters inParameters,
+            double wavelength, double wavelengthWidth);
 
-    private double getContiniumIntensityAveraged(Inparameters inParameters,
-            double wavelength, double slice) {
-        // Get a mean value of the intensity inside the slice
-        int numAverage = Inparameters.NUM_AVERAGE;
-        double dLambda = slice / (double) (numAverage -1);
-        double aWavelength = wavelength - (slice / 2.0d);
-        double aSum = 0.0d;
-        for (int i = 0; i < numAverage; i++) {
-                aSum += getContiniumIntensity(inParameters, aWavelength);
-                aWavelength += dLambda;
-            }
-        return (aSum / (double) numAverage);
-    }
+//    private double getContiniumIntensity(Inparameters inParameters,
+//            double wavelength, double slice) {
+//        // Get a mean value of the intensity inside the slice
+//        int numAverage = Inparameters.NUM_AVERAGE;
+//        double dLambda = slice / (double) (numAverage -1);
+//        double aWavelength = wavelength - (slice / 2.0d);
+//        double aSum = 0.0d;
+//        for (int i = 0; i < numAverage; i++) {
+//                aSum += SourceCalculation.this.getContiniumIntensity(inParameters, aWavelength);
+//                aWavelength += dLambda;
+//            }
+//        return (aSum / (double) numAverage);
+//    }
     
     // This method is implemented by the classes extending this class
     protected abstract void calculateTubeLineIntensities(
@@ -283,6 +284,12 @@ public abstract class SourceCalculation {
         // Get factor for normalizing
         
         double normFac = maxPeak / mPeak;
+        System.out.println("normFac = " + normFac);
+        
+        outputData.getTubeLines().stream()
+                .forEach(sPart ->
+                        System.out.println("Peak int = " + sPart.getIntensity() * sPart.getWindow()));
+        
         
         // Normalize peaks
         

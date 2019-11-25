@@ -81,7 +81,8 @@ public class NistCalculation extends SourceCalculation {
     }
 
     @Override
-    protected double getContiniumIntensity(Inparameters inParameters, double wavelength) {
+    protected double getContiniumIntensity(Inparameters inParameters,
+            double wavelength, double wavelengthWidth) {
         // Get tube anode atomic number
         int z = inParameters.getAnodeElement().getAtomicNumber();
 
@@ -97,7 +98,7 @@ public class NistCalculation extends SourceCalculation {
 
     private static double getPellaXi(int z, double wavelength, double takeOffAngle,
             double minWl) {
-        return (AbsCoefficient.getMassAbsCoefficient(z, wavelength) / Math.sin(takeOffAngle))
+        return (AbsCoefficient.getTau(z, wavelength) / Math.sin(takeOffAngle))
                 * ((1.0d / Math.pow(minWl, 1.65d)) - (1.0d / Math.pow(wavelength, 1.65d)));
     }
 
@@ -192,7 +193,8 @@ public class NistCalculation extends SourceCalculation {
                         double ratio = fac1 * fac2 * fac3;
                         // Get line integrated intensity
                         double lineIntegralInt = ratio
-                                * getContiniumIntensity(inParameters, wavelength);
+                                * getContiniumIntensity(inParameters,
+                                        wavelength, 0.0d); // Width is not used in the Pella algorithm
 //                        System.out.println(xrfLine.toString() + " U0 = " + u0
 //                                + " Exponent = " + exponent + " p1 = " + fac1
 //                                + " p2 = " + fac2 + " p3 = " + fac3);
@@ -212,7 +214,8 @@ public class NistCalculation extends SourceCalculation {
         // If L_A12 intensity has been generated then additional  L lines will be
         // added according to the second Pella et al. reference (no. 2)
         // Check if L_A12 line was generated
-        List<SpectrumPart> allLines = tempOut; // Assume no L_A12 line
+        List<SpectrumPart> allLines = tempOut;
+        // Assume no L_A12 line
         Map<Integer, LineInfo> lineInfoMap = tubeLineInfo.get(XrfLine.L_ALPHA_12);
         Optional<LineInfo> optLineInfo
                 = Optional.ofNullable(lineInfoMap.get(z));
@@ -294,6 +297,7 @@ public class NistCalculation extends SourceCalculation {
         double intLa1Int = lA12Intensity / 1.1d; // This is the reference intensity 
         result.add(new SpectrumPart(wavelength, lineWidth, intLa1Int / lineWidth));
         //L_A2
+        lInfo = TubeLines.getLlineData(XrfLine.L_ALPHA_2, z);
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         double lA2int = 0.1d * intLa1Int;
@@ -303,7 +307,7 @@ public class NistCalculation extends SourceCalculation {
         wavelength = Inparameters.CONV_KEV_ANGSTROM / lInfo.getEnergy();
         lineWidth = getLineWidth(lInfo.getEnergy(), lInfo.getLineWidth());
         double fT = getPellaF(z, wavelength, takeOffAngle, minWl) / fA12;
-        double relP = 0.2575 * Math.log((double) z) - 0.8845d;
+        double relP = 0.2575d * Math.log((double) z) - 0.8845d;
         double lB2int = relP * intLa1Int;
         result.add(new SpectrumPart(wavelength, lineWidth, ((lB2int * fT) / lineWidth)));
         // L_L

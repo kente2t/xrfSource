@@ -532,29 +532,28 @@ public class XraySourceGuiMainController implements Initializable {
                 new ExtensionFilter(description, extensions));
         }
         file = fileChooser.showSaveDialog(_mainProgram.getPrimaryStage());
-        String SelDescription = fileChooser.getSelectedExtensionFilter().getDescription();
-        
-        // Format spectrum info using selected formatter
-        byte[] formattedOutput = null;
-        for (SpectrumFormatSPI service : loader) {
-            if (service.getDescription().equals(SelDescription)) {
-                formattedOutput = service.createByteArray(outputData);
-                if (formattedOutput == null) {
-                    Toolkit.getDefaultToolkit().beep();
-                    alert = new Alert(Alert.AlertType.ERROR,
-                            "Formatter reported an error:\n"
-                            + "Error code = " + service.getErrorCode() + "\n"
-                            + "Description = " + service.getDescription());
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                    return;
+        byte[] formattedOutput;
+        if (file == null) {
+            return; // Operator selected cancel
+        } else {
+            // Format spectrum info using selected formatter
+            String SelDescription = fileChooser.getSelectedExtensionFilter().getDescription();
+            formattedOutput = null;
+            for (SpectrumFormatSPI service : loader) {
+                if (service.getDescription().equals(SelDescription)) {
+                    formattedOutput = service.createByteArray(outputData);
+                    if (formattedOutput == null) {
+                        Toolkit.getDefaultToolkit().beep();
+                        alert = new Alert(Alert.AlertType.ERROR,
+                                "Formatter reported an error:\n"
+                                + "Error code = " + service.getErrorCode() + "\n"
+                                + "Description = " + service.getDescription());
+                        alert.setHeaderText(null);
+                        alert.showAndWait();
+                        return;
+                    }
                 }
             }
-        }
-
-        // Skip if operator selected Cancel
-        if (file == null) {
-            return;
         }
         // Save directory path
         _lastDirectoryPath = file.getParent();
