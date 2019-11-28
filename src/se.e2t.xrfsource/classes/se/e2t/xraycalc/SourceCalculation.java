@@ -214,6 +214,11 @@ public abstract class SourceCalculation {
         double cmThickness = 0.0001d * thickness;
         double attCoeff = AbsCoefficient
                 .getAttenuationCoefficient(atomicNumber, wavelength);
+//        double mAbsC = AbsCoefficient.getMassAbsCoefficient(atomicNumber, wavelength);
+//        double density = AbsCoefficient.getDensity(atomicNumber);
+//        System.out.println("w = " + wavelength + " aAbsC = " + mAbsC +
+//                " dens = " + density + " thick = " + cmThickness +
+//                " attC = " + attCoeff);
         return Math.exp(-attCoeff * cmThickness);
     }
     
@@ -284,12 +289,16 @@ public abstract class SourceCalculation {
         // Get factor for normalizing
         
         double normFac = maxPeak / mPeak;
-        System.out.println("normFac = " + normFac);
-        
-        outputData.getTubeLines().stream()
-                .forEach(sPart ->
-                        System.out.println("Peak int = " + sPart.getIntensity() * sPart.getWindow()));
-        
+     
+//        System.out.println("normFac = " + normFac);
+//        outputData.getTubeLines().stream()
+//                .forEach(sPart -> {
+//                    double wavelength = sPart.getWavelength();
+//                    double intensity = sPart.getIntensity();
+//                    double linewidth = sPart.getWindow();
+//                    System.out.println("w = " + wavelength + " lw = " + linewidth
+//                            + " i = " + intensity + " total = " + intensity * linewidth);
+//                });
         
         // Normalize peaks
         

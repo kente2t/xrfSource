@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import se.e2t.abscoeffcalculate.AbsCoefficient;
 import se.e2t.xraycalc.AbsorptionEdges.AbsEdge;
 import se.e2t.xraycalc.TubeLines.LineInfo;
@@ -43,6 +44,7 @@ public class EbelCalculation extends SourceCalculation {
         double energy0 = inParameters.getTubeVoltage();
         double energy = Inparameters.CONV_KEV_ANGSTROM / wavelength;
         double xExponent = 1.109d - 0.00435d * zD + 0.00175d * energy0;
+        // Calculate variables of long expression including photelectric mass absorption
         double tauEj = AbsCoefficient.getTau(z, wavelength);
         double sinPhi = Math.sin(inParameters.getInAngle() * Inparameters.ANGLE_CONV);
         double sinEpsilon = Math.sin(inParameters.getOutAngle() * Inparameters.ANGLE_CONV);
@@ -65,7 +67,6 @@ public class EbelCalculation extends SourceCalculation {
 //        System.out.println("longExpression = " + longExpression);
 //        System.out.println("intensity = " + intensity);
 
-        
         // Return a per Angstrom value
         return intensity / wavelengthWidth;
     }
@@ -120,7 +121,7 @@ public class EbelCalculation extends SourceCalculation {
 
         majorLineInfo.keySet().stream()
                 .filter(xrfLine -> TubeLines.isKline(xrfLine)) // Major lines includes some L and a M line
-                .filter(xrfLine -> AbsorptionEdges.getEdge(xrfLine).isPresent())
+                .filter(xrfLine -> Optional.ofNullable(majorLineInfo.get(xrfLine).get(z)).isPresent())                .filter(xrfLine -> AbsorptionEdges.getEdge(xrfLine).isPresent())
                 .filter(xrfLine -> FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).isPresent())
                 .filter(xrfLine -> TransProbabilities.getTransProb(z, xrfLine).isPresent())
                 .forEach(xrfLine -> {
@@ -152,9 +153,9 @@ public class EbelCalculation extends SourceCalculation {
                                 + 0.009583d * zD * Math.exp(-u0) + 0.001141d * energy0;
                         double omegaJK = FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).get();
                         double pJKL = TransProbabilities.getTransProb(z, xrfLine).get();
-                        System.out.println("l = " + xrfLine.toString() +
-                                " w = " + wavelength + " y = " + omegaJK +
-                                " p = " + pJKL);
+//                        System.out.println("l = " + xrfLine.toString() +
+//                                " w = " + wavelength + " y = " + omegaJK +
+//                                " p = " + pJKL);
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
@@ -173,6 +174,7 @@ public class EbelCalculation extends SourceCalculation {
 
         lLineInfo.keySet().stream()
                 .filter(xrfLine -> AbsorptionEdges.getEdge(xrfLine).isPresent())
+                .filter(xrfLine -> Optional.ofNullable(lLineInfo.get(xrfLine).get(z)).isPresent()) 
                 .filter(xrfLine -> FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).isPresent())
                 .filter(xrfLine -> TransProbabilities.getTransProb(z, xrfLine).isPresent())
                 .forEach(xrfLine -> {
@@ -204,9 +206,6 @@ public class EbelCalculation extends SourceCalculation {
                                 + 0.009583d * zD * Math.exp(-u0) + 0.001141 * energy0;
                         double omegaJK = FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).get();
                         double pJKL = TransProbabilities.getTransProb(z, xrfLine).get();
-                        System.out.println("l = " + xrfLine.toString() +
-                                " w = " + wavelength + " y = " + omegaJK +
-                                " p = " + pJKL);
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
@@ -222,6 +221,13 @@ public class EbelCalculation extends SourceCalculation {
                         }
                         // Calculate line intensity
                         double intensity = constX * sPowFactor * r * omegaJK * pJKL * fFunction;
+                        
+//                        System.out.println("l = " + xrfLine.toString() +
+//                                " w = " + wavelength + " cX = " + constX +
+//                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
+//                                " p = " + pJKL + " f = " + fFunction +
+//                                " lw = " + lineWidth + " i = " + intensity +
+//                                " st = " + intensity / lineWidth);
                         
                         // Store calculated intensity converted to a per angstrom value
                         allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));

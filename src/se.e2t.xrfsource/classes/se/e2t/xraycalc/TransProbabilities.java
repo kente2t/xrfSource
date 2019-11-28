@@ -236,15 +236,15 @@ public class TransProbabilities {
         return Optional.ofNullable(TRANS_PROB_DATA.get(line).get(atomZ));
     }
     
-    static {
-         TRANS_PROB_DATA.keySet().stream()
-                .forEach(xrfLine -> {
-                    System.out.println("\n" + xrfLine.toString());
-                    TRANS_PROB_DATA.get(xrfLine).keySet().stream()
-                            .forEach(atomZ -> {
-                                System.out.println(atomZ + " "
-                                        + String.format("%.3f", TRANS_PROB_DATA.get(xrfLine).get(atomZ)));
-                            });
-                });
-    }
+//    static {
+//         TRANS_PROB_DATA.keySet().stream()
+//                .forEach(xrfLine -> {
+//                    System.out.println("\n" + xrfLine.toString());
+//                    TRANS_PROB_DATA.get(xrfLine).keySet().stream()
+//                            .forEach(atomZ -> {
+//                                System.out.println(atomZ + " "
+//                                        + String.format("%.3f", TRANS_PROB_DATA.get(xrfLine).get(atomZ)));
+//                            });
+//                });
+//    }
 }

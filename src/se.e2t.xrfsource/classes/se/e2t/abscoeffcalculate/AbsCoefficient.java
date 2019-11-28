@@ -68,4 +68,14 @@ public class AbsCoefficient {
             return Double.NaN;
         }
     }
+    
+    public static double getDensity(int Z) {
+        Mucal mc = new Mucal(null, Z, 0.0d, 'C', true);
+        ErrorCode ec = mc.calculate();
+        if (ec == ErrorCode.no_error) {
+            return mc.getXsec()[7];
+        } else {
+            return Double.NaN;
+        }
+    }
 }

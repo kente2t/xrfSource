@@ -239,10 +239,10 @@ public class TubeLines {
         initializeLineData(getLlineInfo());
         
         // Print data for verification purposes
-        System.out.println("TUBE_LINE_INFO");
-        printLineData(getMajorLineInfo());
-        System.out.println("\nTUBE_L_LINE_INFO");
-        printLineData(getLlineInfo());
+//        System.out.println("TUBE_LINE_INFO");
+//        printLineData(getMajorLineInfo());
+//        System.out.println("\nTUBE_L_LINE_INFO");
+//        printLineData(getLlineInfo());
     }
     
     private static void initializeLineData(Map<XrfLine, Map<Integer, LineInfo>> lines) {
@@ -316,7 +316,6 @@ public class TubeLines {
         public double getAbsorptionEdge() {
             return _absorptionEdge;
         }
-
     }
 
     public static Map<XrfLine, Map<Integer, LineInfo>> getMajorLineInfo() {
