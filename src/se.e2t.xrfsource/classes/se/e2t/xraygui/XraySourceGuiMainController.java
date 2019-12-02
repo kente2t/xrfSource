@@ -40,6 +40,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import se.e2t.xraycalc.EbelCalculation;
+import se.e2t.xraycalc.FinPavCalculation;
 import se.e2t.xraycalc.Inparameters;
 import static se.e2t.xraycalc.Inparameters.getAlgorithms;
 import static se.e2t.xraycalc.Inparameters.Algorithm;
@@ -488,7 +489,10 @@ public class XraySourceGuiMainController implements Initializable {
                 outputData = new NistCalculation().calculate(_inParameters);     
                 break;
             case EBEL:
-                outputData = new EbelCalculation().calculate(_inParameters);    
+                outputData = new EbelCalculation().calculate(_inParameters);
+                break;
+            case FINPAV:
+                outputData = new FinPavCalculation().calculate(_inParameters);
             default:
                 Toolkit.getDefaultToolkit().beep();
         }
@@ -499,8 +503,8 @@ public class XraySourceGuiMainController implements Initializable {
         // Inform number of spectreum intervals
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Generated spectrum has " + numIntervals + " intervals.\n" +
-                        "Max number handled by MS Decipher is " +
-                        MSDECIPHER_MAX_INTERVALS + ".");
+                        "Compare this number to the maximum number\n" +
+                        "of intervals handled by your calculation program.");
         alert.setTitle("Confirmation");
         alert.setHeaderText(null);
         Optional<ButtonType> response = alert.showAndWait();

@@ -6,6 +6,7 @@ package se.e2t.xraycalc;
 import java.util.ArrayList;
 import java.util.List;
 import static se.e2t.xraycalc.Inparameters.CalcModel.EBEL;
+import static se.e2t.xraycalc.Inparameters.CalcModel.FINPAV;
 import static se.e2t.xraycalc.Inparameters.CalcModel.NIST;
 
 /**
@@ -49,14 +50,15 @@ public class Inparameters {
     }
     
      public static enum CalcModel {
-        NIST, EBEL
+        NIST, EBEL, FINPAV
     };
     
     private static final List<Algorithm> ALG_ALTERNATIVES;
     static {
         ALG_ALTERNATIVES = new ArrayList<>();
         ALG_ALTERNATIVES.add(new Algorithm("NIST (Pella et al.)", NIST));
-        ALG_ALTERNATIVES.add(new Algorithm("Horst Ebels algorithms", EBEL));
+        ALG_ALTERNATIVES.add(new Algorithm("Horst Ebel's algorithms", EBEL));
+        ALG_ALTERNATIVES.add(new Algorithm("Finkelshtein and Pavlova", FINPAV));
     }
     
     public static final List<TubeElement> FILTER_ALTERNATIVES;

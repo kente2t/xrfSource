@@ -45,8 +45,6 @@ public class NistCalculation extends SourceCalculation {
         NIST_PAR.put(XrfLine.M_ALPHA_12, new NistInfo(1.76e8d, 1.02e6d, 0.0d));
     }
 
-    ;
-
     public NistCalculation() {
         super();
     }

@@ -22,9 +22,9 @@ import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
  * by Horst Ebel working at The Technical University in Vienna.
  *
  * Publications:
- * 1. X-ray Tube Spectra. Horst Ebel, X-ray Spectrometry, Bol 28,pages 255-266.
+ * 1. X-ray Tube Spectra. Horst Ebel, X-ray Spectrometry, Vol 28,pages 255-266.
  * 2. Lt, La12, Ln, Lb123456, Ly123 spectra of x-ray tubes. Horst Ebel,
- * X-ray Spectrometry 32, åpages 46-51.
+ * X-ray Spectrometry 32, pages 46-51.
  */
 public class EbelCalculation extends SourceCalculation {
     
@@ -153,15 +153,20 @@ public class EbelCalculation extends SourceCalculation {
                                 + 0.009583d * zD * Math.exp(-u0) + 0.001141d * energy0;
                         double omegaJK = FlourYield.getYield(z, AbsorptionEdges.getEdge(xrfLine).get()).get();
                         double pJKL = TransProbabilities.getTransProb(z, xrfLine).get();
-//                        System.out.println("l = " + xrfLine.toString() +
-//                                " w = " + wavelength + " y = " + omegaJK +
-//                                " p = " + pJKL);
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
                         // Convert line integrated intensity to per Angstrom value
-                        double intensity = (constK * sPowFactor * r * omegaJK * pJKL * fFunction) / lineWidth;
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity));
+                        double intensity = constK * sPowFactor * r * omegaJK * pJKL * fFunction;
+                                                System.out.println("\nl = " + xrfLine.toString() +
+                                " w = " + wavelength + " const = " + constK +
+                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
+                                " p = " + pJKL + " f = " + fFunction +
+                                " rouZ = " + rouZ + " tau = " + tau +                        
+                                " lw = " + lineWidth + " i = " + intensity +
+                                " st = " + intensity / lineWidth);
+
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
                     }
                 });
 
@@ -222,12 +227,13 @@ public class EbelCalculation extends SourceCalculation {
                         // Calculate line intensity
                         double intensity = constX * sPowFactor * r * omegaJK * pJKL * fFunction;
                         
-//                        System.out.println("l = " + xrfLine.toString() +
-//                                " w = " + wavelength + " cX = " + constX +
-//                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
-//                                " p = " + pJKL + " f = " + fFunction +
-//                                " lw = " + lineWidth + " i = " + intensity +
-//                                " st = " + intensity / lineWidth);
+                        System.out.println("\nl = " + xrfLine.toString() +
+                                " w = " + wavelength + " cX = " + constX +
+                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
+                                " p = " + pJKL + " f = " + fFunction +
+                                " rouZ = " + rouZ + " tau = " + tau +
+                                " lw = " + lineWidth + " i = " + intensity +
+                                " st = " + intensity / lineWidth);
                         
                         // Store calculated intensity converted to a per angstrom value
                         allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
