@@ -17,6 +17,8 @@ import java.util.Optional;
  * Title: A Review, Bibliographu, and Tabulation of K, L, and higher Atomic
  * Shell X-Ray Flourescence Yields
  * Journal: Journal of Physical and Chemical Refernece Data 23, 339-364 (1994).
+ * 
+ * The L shell yields tabulated are averaged yields för L1, L2 and L3.
  */
 public class FlourYield {
     

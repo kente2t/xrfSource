@@ -4,6 +4,7 @@
 package se.e2t.abscoeffcalculate;
 
 import se.e2t.abscoeffcalculate.Mucal.ErrorCode;
+import se.e2t.xraycalc.AbsorptionEdges.AbsEdge;
 import se.e2t.xraycalc.Inparameters;
 
 /**
@@ -77,5 +78,24 @@ public class AbsCoefficient {
         } else {
             return Double.NaN;
         }
+    }
+    
+    public static double getLFlourYield(int Z, AbsEdge lEdge) {
+        Mucal mc = new Mucal(null, Z, 0.0d, 'C', true);
+        ErrorCode ec = mc.calculate();
+        double retval = Double.NaN;
+        if (ec == ErrorCode.no_error) {
+            switch (lEdge) {
+                case L1_EDGE:
+                    retval = mc.getFl_yield()[1];
+                    break;
+                case L2_EDGE:
+                    retval = mc.getFl_yield()[2];
+                    break;
+                case L3_EDGE:
+                    retval = mc.getFl_yield()[3];
+            }
+        }
+        return retval;
     }
 }

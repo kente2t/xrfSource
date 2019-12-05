@@ -497,10 +497,18 @@ public class XraySourceGuiMainController implements Initializable {
                 Toolkit.getDefaultToolkit().beep();
         }
         // Count the number of spectrum intervals
+         if (outputData == null) {
+             Toolkit.getDefaultToolkit().beep();
+             Alert alert = new Alert(Alert.AlertType.ERROR,
+                     "No spectrum intervals were produced!");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
         int numIntervals = outputData.getTubeLines().size() +
                 outputData.getContinium().size();
 
-        // Inform number of spectreum intervals
+        // Inform number of spectrum intervals
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "Generated spectrum has " + numIntervals + " intervals.\n" +
                         "Compare this number to the maximum number\n" +
@@ -511,10 +519,7 @@ public class XraySourceGuiMainController implements Initializable {
         if (response.isPresent() && (response.get() == ButtonType.CANCEL)) return;
         
         // Ask for a file name
-        File file = null;
-        if (outputData == null) {
-            return;
-        }
+        File file;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Specify spectrum file name");
         fileChooser.setInitialDirectory(new File(_lastDirectoryPath));

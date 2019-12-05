@@ -51,21 +51,23 @@ public class EbelCalculation extends SourceCalculation {
         double rouZ = getRouZ(inParameters.getTubeVoltage(), wavelength, z);
         double longExpression = tauEj * 2.0d * rouZ
                 * (sinPhi / sinEpsilon);
+        double fFactor = (1.0d - Math.exp(-longExpression)) / longExpression;
         double deltaE = Inparameters.CONV_KEV_ANGSTROM / (wavelength - (wavelengthWidth / 2.0d)) -
                 Inparameters.CONV_KEV_ANGSTROM / (wavelength + (wavelengthWidth / 2.0d));
         double intensity = 1.35e9d * zD
                 * Math.pow(((energy0 / energy) - 1.0d), xExponent)
-                * ((1.0d - Math.exp(-longExpression)) / longExpression)
-                * deltaE;
-//        System.out.println("energy0 = " + energy0);
-//        System.out.println("energy = " + energy);
-//        System.out.println("xExponent = " + xExponent);
-//        System.out.println("tauEj = " + tauEj);
-//        System.out.println("sinPhi = " + sinPhi);
-//        System.out.println("sinEpsilon = " + sinEpsilon);
-//        System.out.println("rouZ = " + rouZ);
-//        System.out.println("longExpression = " + longExpression);
-//        System.out.println("intensity = " + intensity);
+                * fFactor * deltaE;
+         System.out.println("w = " + wavelength);
+        System.out.println("energy0 = " + energy0);
+        System.out.println("energy = " + energy);
+        System.out.println("xExponent = " + xExponent);
+        System.out.println("tauEj = " + tauEj);
+        System.out.println("sinPhi = " + sinPhi);
+        System.out.println("sinEpsilon = " + sinEpsilon);
+        System.out.println("rouZ = " + rouZ);
+        System.out.println("longExpression = " + longExpression);
+        System.out.println("fFactor = " + fFactor);
+        System.out.println("intensity = " + intensity);
 
         // Return a per Angstrom value
         return intensity / wavelengthWidth;
@@ -158,7 +160,7 @@ public class EbelCalculation extends SourceCalculation {
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
                         // Convert line integrated intensity to per Angstrom value
                         double intensity = constK * sPowFactor * r * omegaJK * pJKL * fFunction;
-                                                System.out.println("\nl = " + xrfLine.toString() +
+                        System.out.println("\nl = " + xrfLine.toString() +
                                 " w = " + wavelength + " const = " + constK +
                                 " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
                                 " p = " + pJKL + " f = " + fFunction +
