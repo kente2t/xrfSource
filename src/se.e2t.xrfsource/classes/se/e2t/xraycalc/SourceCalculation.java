@@ -50,30 +50,34 @@ public abstract class SourceCalculation {
         double sliceUpper = centerWavelength + (normalSlice / 2.0d);
         double maxWavelength = inParameters.getMaxWavelength();
 
-        // Add continium slices until slice upper wavelength is above K edge
-        // or max ordered wavelength
-        do {
-            outputData.addContiniumSlice(
-                    new SpectrumPart(centerWavelength, normalSlice,
-                            getContiniumIntensity(inParameters,
-                                    centerWavelength, normalSlice)));
-            centerWavelength += normalSlice;
-            sliceUpper += normalSlice;
-        } while ((sliceUpper < maxWavelength) && (sliceUpper < wlBelowKedge));
-
-        if (sliceUpper < maxWavelength) {
-            // Go up to K edge
-            double slice = wlBelowKedge - (centerWavelength - (normalSlice / 2.0d));
-            centerWavelength = wlBelowKedge - (slice / 2.0d);
-            if (slice > MINIMUM_SLICE) {
+        if ((sliceUpper < maxWavelength) && (sliceUpper < wlBelowKedge)) {
+            // Add continium slices until slice upper wavelength is above K edge
+            // or max ordered wavelength
+            do {
                 outputData.addContiniumSlice(
-                        new SpectrumPart(centerWavelength, slice,
+                        new SpectrumPart(centerWavelength, normalSlice,
                                 getContiniumIntensity(inParameters,
-                                        centerWavelength, slice)));
+                                        centerWavelength, normalSlice)));
+                centerWavelength += normalSlice;
+                sliceUpper += normalSlice;
+            } while ((sliceUpper < maxWavelength) && (sliceUpper < wlBelowKedge));
+
+            if (sliceUpper < maxWavelength) {
+                // Go up to K edge
+                double slice = wlBelowKedge - (centerWavelength - (normalSlice / 2.0d));
+                centerWavelength = wlBelowKedge - (slice / 2.0d);
+                if (slice > MINIMUM_SLICE) {
+                    outputData.addContiniumSlice(
+                            new SpectrumPart(centerWavelength, slice,
+                                    getContiniumIntensity(inParameters,
+                                            centerWavelength, slice)));
+                }
+                // Restart at K edge
+                centerWavelength = wlAboveKedge + (normalSlice / 2.0d);
+                sliceUpper = centerWavelength + (normalSlice / 2.0d);
             }
-            // Restart at K edge
-            centerWavelength = wlAboveKedge + (normalSlice / 2.0d);
-            sliceUpper = centerWavelength + (normalSlice / 2.0d);
+        }
+        if (sliceUpper < maxWavelength) {
             // Add continium slices until slice upper wavelength is above L1 edge
             // or max ordered wavelength
             do {
@@ -172,7 +176,6 @@ public abstract class SourceCalculation {
 
         return outputData;
     }
-    
     // This method is implemented by the classes extending this class
     protected abstract double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth);

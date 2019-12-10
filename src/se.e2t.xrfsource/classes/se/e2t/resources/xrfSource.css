@@ -1,0 +1,67 @@
+/*
+* xrfSource.css
+*/
+
+/* 
+    Created on : 9 dec. 2019, 22:48:51
+    Author     : Kent
+*/
+
+* {
+   -app-standard-color: lightblue;
+   -right-column-width: 245;
+}
+.label {
+    -fx-font-family: fantasy;
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+    -fx-opaque-insets: 10,0,0,0
+}
+.menu-bar {
+      -fx-background-color: -app-standard-color;
+}
+.menu-bar .container .menu:openvertically .label {
+    -fx-font-family: fantasy;
+    -fx-font-size: 14;
+    -tx-font-style: normal;
+    -fx-font-weight: normal;
+}
+.choice-box {
+    -fx-background-color: -app-standard-color;
+    -fx-pref-width: -right-column-width;
+}
+
+.button {
+    -fx-background-color: -app-standard-color;
+}
+
+.table-view:row-selection .column-header-background .filler {
+    -fx-background-color: -app-standard-color;
+}
+
+.table-view:row-selection .column-header-background .nested-column-header .column-header {
+    -fx-background-color: -app-standard-color;
+}
+
+.grid-pane {
+    -fx-padding: 10;
+    -fx-vgap: 10;
+}
+
+.root {
+    -fx-border-color: -app-standard-color;
+    -fx-border-width: 3;
+}
+
+.check-box:determinate {
+    -fx-padding: 5;
+}
+
+.table-view:row-selection {
+    -fx-pref-height: 150;
+    -fx_pref-width: -right-column-width;
+}
+
+.text-field {
+     -fx_pref-width: -right-column-width;
+}
