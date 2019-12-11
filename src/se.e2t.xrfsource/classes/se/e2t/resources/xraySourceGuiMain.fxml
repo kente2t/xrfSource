@@ -45,7 +45,7 @@
     </MenuBar>
       <GridPane maxWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" styleClass="grid-pane">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="110.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
