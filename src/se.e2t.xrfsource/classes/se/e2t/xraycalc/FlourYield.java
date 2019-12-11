@@ -61,7 +61,7 @@ public class FlourYield {
     }
 
     public static Optional<Double> getYield(int atomZ, AbsorptionEdges.AbsEdge edge) {
-        Optional retval = Optional.empty();
+        Optional<Double> retval = Optional.empty();
         if (Optional.ofNullable(FLOURESCENCE_YIELDS.get(edge)).isPresent()) {
             retval = Optional.ofNullable(Optional.of(FLOURESCENCE_YIELDS.get(edge)).get().get(atomZ));
         }

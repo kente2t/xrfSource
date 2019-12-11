@@ -10,7 +10,10 @@
 * {
    -app-standard-color: lightblue;
    -right-column-width: 245;
+   -filter-buttons-width: 138;
+   -filter-dialog-middle-field-width: 40;
 }
+
 .label {
     -fx-font-family: fantasy;
     -fx-font-size: 12;
@@ -59,9 +62,25 @@
 
 .table-view:row-selection {
     -fx-pref-height: 150;
-    -fx_pref-width: -right-column-width;
+    -fx-pref-width: -right-column-width;
 }
 
 .text-field {
      -fx_pref-width: -right-column-width;
+}
+
+.generate-button {
+    -fx-pref-width: -right-column-width;
+}
+
+.tube-filter-buttons {
+    -fx-pref-width: -filter-buttons-width;
+}
+
+.filter-dialog-elements {
+    -fx-pref-width: -filter-dialog-middle-field-width;
+}
+
+.generate-button-label {
+    -fx-font-weight: bold;
 }

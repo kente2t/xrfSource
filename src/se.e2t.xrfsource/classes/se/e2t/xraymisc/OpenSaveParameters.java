@@ -47,6 +47,7 @@ public class OpenSaveParameters {
     private static final String ATTR_FILTER_THICKNESS = "filterThickness";
     private static final String ATTR_ANODE_VOLTAGE = "anodeVoltage";
     private static final String ATTR_INTERVAL_SIZE = "intervalSize";
+    private static final String ATTR_SPLIT_INTERVAL_AT_EDGE = "splitAtEdge";
     private static final String ATTR_MAX_WAVELENGTH = "maxWavelength";
 
     private static final String ANODE_ELEMENT_TAG = "AnodeElement";
@@ -102,6 +103,11 @@ public class OpenSaveParameters {
             alert.setHeaderText(null);
             alert.showAndWait();
             return;
+        }
+        
+        // If file produced by version 1.0.0 then preset new version 2.0 parameter value
+        if (pgmVersion.equals("1.0.0")) {
+            parameters.setSplitAtAbsEdge(true);
         }
 
         // Read XML into DOM object
@@ -186,6 +192,9 @@ public class OpenSaveParameters {
             }
             if (attr.getName().equals(ATTR_INTERVAL_SIZE)) {
                 parameters.setContiniumIntervalSize(Double.valueOf(attr.getValue()));
+            }
+             if (attr.getName().equals(ATTR_SPLIT_INTERVAL_AT_EDGE)) {
+                parameters.setSplitAtAbsEdge(Boolean.valueOf(attr.getValue()));
             }
             if (attr.getName().equals(ATTR_MAX_WAVELENGTH)) {
                 parameters.setMaxWavelength(Double.valueOf(attr.getValue()));
@@ -459,6 +468,7 @@ public class OpenSaveParameters {
             root.setAttribute(ATTR_FILTER_THICKNESS, String.valueOf(parameters.getFilterThickness()));
             root.setAttribute(ATTR_ANODE_VOLTAGE, String.valueOf(parameters.getTubeVoltage()));
             root.setAttribute(ATTR_INTERVAL_SIZE, String.valueOf(parameters.getContiniumIntervalSize()));
+              root.setAttribute(ATTR_SPLIT_INTERVAL_AT_EDGE, String.valueOf(parameters.isSplitAtAbsEdge()));
             root.setAttribute(ATTR_MAX_WAVELENGTH, String.valueOf(parameters.getMaxWavelength()));
             doc.appendChild(root);
 
@@ -498,7 +508,7 @@ public class OpenSaveParameters {
             // Output the DOM object to a string and feed this string
             // through a transformer to adjust output
             TransformerFactory transfac = TransformerFactory.newInstance();
-            transfac.setAttribute("indent-number", new Integer(3));
+            transfac.setAttribute("indent-number", 3);
             try {
                 trans = transfac.newTransformer();
             } catch (TransformerConfigurationException ex) {

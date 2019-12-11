@@ -27,8 +27,8 @@ public class Guistart extends Application {
     
     @Override
     public void init() {
-        int kalle = 1;
     }
+    
     @Override
     public void start(Stage stage) throws Exception {
         

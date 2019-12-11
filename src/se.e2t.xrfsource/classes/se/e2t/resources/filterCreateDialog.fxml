@@ -25,9 +25,9 @@
           <RowConstraints minHeight="60.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Filter element" />
-            <ChoiceBox fx:id="_filterElementSelect" prefWidth="150.0" GridPane.columnIndex="1" />
-            <TextField fx:id="_filterElementConc" onAction="#filterElementConcOnAction" onKeyPressed="#filterElementConcKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Filter element:" />
+            <ChoiceBox fx:id="_filterElementSelect" prefWidth="150.0" styleClass="filter-dialog-elements" GridPane.columnIndex="1" />
+            <TextField fx:id="_filterElementConc" onAction="#filterElementConcOnAction" onKeyPressed="#filterElementConcKeyPressed" styleClass="filter-dialog-elements" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Element concentration (%):" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
@@ -52,7 +52,7 @@
                </GridPane.margin>
             </Button>
             <Label text="Concentration sum (%):" GridPane.rowIndex="2" />
-            <TextField fx:id="_concSum" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="_concSum" editable="false" styleClass="filter-dialog-elements" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <opaqueInsets>
             <Insets />

@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableCell;
@@ -65,7 +66,6 @@ import se.e2t.xrfsource.format.spi.SpectrumFormatSPI;
  */
 public class XraySourceGuiMainController implements Initializable {
 
-    private static final int MSDECIPHER_MAX_INTERVALS = 400;
     private Inparameters _inParameters;
     private String _lastParamFilePath;
     private String _lastDirectoryPath;
@@ -118,6 +118,8 @@ public class XraySourceGuiMainController implements Initializable {
     private MenuBar _menuBar;
     @FXML
     private Button _removeFilterButton;
+    @FXML
+    private CheckBox _splitAtAbsEdge;
 
     /**
      * Initializes the controller class.
@@ -245,6 +247,8 @@ public class XraySourceGuiMainController implements Initializable {
         _tubeVoltage.setText(String.format("%.1f", parameters.getTubeVoltage()));
         // Continium interval size
         _continiumSlice.setText(String.format("%.3f", parameters.getContiniumIntervalSize()));
+        // Split at absorption edge
+        _splitAtAbsEdge.setSelected(parameters.isSplitAtAbsEdge());
         // Max wavelength
         _maxWavelength.setText(String.format("%.1f", parameters.getMaxWavelength()));
         // Calculation algorithm ChoiceList
@@ -776,4 +780,10 @@ public class XraySourceGuiMainController implements Initializable {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+
+    @FXML
+    private void splitCheckBoxPressed(ActionEvent event) {
+         _inParameters.setSplitAtAbsEdge(_splitAtAbsEdge.isSelected());
+    }
+
 }

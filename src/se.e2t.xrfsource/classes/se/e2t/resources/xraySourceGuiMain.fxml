@@ -96,8 +96,8 @@
             <FlowPane alignment="CENTER_LEFT" orientation="VERTICAL" prefHeight="150.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="6">
                <children>
                   <Label text="Tube filter element(s):" />
-                  <Button fx:id="_modifyFilterButton" mnemonicParsing="false" onAction="#modifyFilterButtonPressed" onKeyPressed="#modifyFilterKeyPressed" text="Modify tube filter" />
-                  <Button fx:id="_removeFilterButton" mnemonicParsing="false" onAction="#removeFilterButtonPressed" text="Remove filter elements" />
+                  <Button fx:id="_modifyFilterButton" mnemonicParsing="false" onAction="#modifyFilterButtonPressed" onKeyPressed="#modifyFilterKeyPressed" styleClass="tube-filter-buttons" text="Modify tube filter" />
+                  <Button fx:id="_removeFilterButton" mnemonicParsing="false" onAction="#removeFilterButtonPressed" styleClass="tube-filter-buttons" text="Remove filter elements" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -143,12 +143,13 @@
                <GridPane.margin>
                   <Insets top="5.0" />
                </GridPane.margin></ChoiceBox>
-            <Button fx:id="_generateFileButton" mnemonicParsing="false" onAction="#generateFileButtonAction" onKeyPressed="#generateFileButtonKeyPressed" text="Generate tube spectrum file" GridPane.columnIndex="1" GridPane.rowIndex="13">
+            <Button fx:id="_generateFileButton" mnemonicParsing="false" onAction="#generateFileButtonAction" onKeyPressed="#generateFileButtonKeyPressed" styleClass="generate-button" text="Generate tube spectrum file" GridPane.columnIndex="1" GridPane.rowIndex="13">
                <GridPane.margin>
                   <Insets bottom="5.0" top="5.0" />
                </GridPane.margin></Button>
-            <CheckBox fx:id="_restartAtAbsEdge" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <Label text="Start new interval at anode absorption edge:" GridPane.rowIndex="10" />
+            <CheckBox fx:id="_splitAtAbsEdge" mnemonicParsing="false" onAction="#splitCheckBoxPressed" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <Label text="Split interval at anode absorption edge:" GridPane.rowIndex="10" />
+            <Label styleClass="generate-button-label" text="Push this button to create file ====&gt;" GridPane.rowIndex="13" />
          </children>
          <opaqueInsets>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

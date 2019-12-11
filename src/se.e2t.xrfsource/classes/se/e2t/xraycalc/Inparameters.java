@@ -20,7 +20,7 @@ public class Inparameters {
     
     public static final double CONV_KEV_ANGSTROM = 12.398d;
     public static final double ANGLE_CONV = Math.PI / 180.0d;
-    public static final String THIS_PROGRAM_VERSION = "1.0.0";
+    public static final String THIS_PROGRAM_VERSION = "2.0.0";
     public static final int NUM_AVERAGE = 100;
     private String _programVersion;
     private String _algDescription;
@@ -35,6 +35,7 @@ public class Inparameters {
     private double _continiumIntervalSize;
     private double _maxWavelength;
     private Algorithm _algorithm;
+    private boolean _splitAtAbsEdge;
     
     private static final List<TubeElement> ANODE_ELEMENTS;
     static {
@@ -84,7 +85,7 @@ public class Inparameters {
         _algDescription = ALG_ALTERNATIVES.get(0).getDescription();
         _anodeElement.setAtomicNumber(ANODE_ELEMENTS.get(0).getAtomicNumber());
         _anodeElement.setSymbol(ANODE_ELEMENTS.get(0).getSymbol());
-        _inAngle = 45.0d;
+        _inAngle = 90.0d;
         _outAngle = 90.0d;
         _windowElement.setAtomicNumber(WINDOW_ELEMENTS.get(0).getAtomicNumber());
         _windowElement.setSymbol(WINDOW_ELEMENTS.get(0).getSymbol());
@@ -94,6 +95,7 @@ public class Inparameters {
         _continiumIntervalSize = 0.1d;
         _maxWavelength = 12.0d;
         _algorithm = getAlgorithms().get(0);
+        _splitAtAbsEdge = true;
     }
 
     public static List<TubeElement> getAnodeElements() {
@@ -214,6 +216,14 @@ public class Inparameters {
         this._programVersion = programVersion;
     }
 
+    public boolean isSplitAtAbsEdge() {
+        return _splitAtAbsEdge;
+    }
+
+    public void setSplitAtAbsEdge(boolean _splitAtAbsEdge) {
+        this._splitAtAbsEdge = _splitAtAbsEdge;
+    }
+    
     public static class TubeElement implements Cloneable {
     private String _symbol;
     private int _atomicNumber;
