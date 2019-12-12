@@ -546,6 +546,7 @@ public class XraySourceGuiMainController implements Initializable {
         }
         file = fileChooser.showSaveDialog(_mainProgram.getPrimaryStage());
         byte[] formattedOutput;
+        String extension = null;
         if (file == null) {
             return; // Operator selected cancel
         } else {
@@ -555,6 +556,8 @@ public class XraySourceGuiMainController implements Initializable {
             for (SpectrumFormatSPI service : loader) {
                 if (service.getDescription().equals(SelDescription)) {
                     formattedOutput = service.createByteArray(outputData);
+                    // Extract service files extension
+                    extension = getExtension(service.getExtensions()).get();
                     if (formattedOutput == null) {
                         Toolkit.getDefaultToolkit().beep();
                         alert = new Alert(Alert.AlertType.ERROR,
@@ -570,6 +573,14 @@ public class XraySourceGuiMainController implements Initializable {
         }
         // Save directory path
         _lastDirectoryPath = file.getParent();
+        // Add extension to filename if necessary
+        Optional<String> fileExtension = getExtension(file.toString());
+        if (fileExtension.isEmpty()) {
+            file = new File(file.toString() + extension);
+        }
+        else {
+            extension = fileExtension.get();
+        }
         int retval = SpectrumFileWriter.writeToFile(formattedOutput, file);
         if (retval != 0) {
             alert = new Alert(Alert.AlertType.ERROR,
@@ -587,25 +598,13 @@ public class XraySourceGuiMainController implements Initializable {
         alert.showAndWait();
 
         // Output parameters to XML file
-        Pattern p = null;
-        try {
-            p = Pattern.compile("^(.*)\\.(.*)$");
-        } catch (PatternSyntaxException pse) {
-            System.out.println("Pattern syntax error!");
-            return;
-        }
-        Matcher m = p.matcher(file.getPath());
-        if (!m.matches()) {
-            System.out.println("No regex match!");
-            return;
-        }
         // Write parameters to modified file name if spectrum was saved as xml
         String parameterPath;
-        if (m.group(2).equalsIgnoreCase("xml")) {
-            parameterPath = m.group(1) + "_par.xml";
+        if (extension.equalsIgnoreCase(".xml")) {
+            parameterPath = file.toString().replace(extension, "_par.xml");
         }
         else {
-            parameterPath = m.group(1) + ".xml";
+            parameterPath = file.toString().replace(extension, ".xml");
         }
         OpenSaveParameters.saveParameters(_inParameters, new File(parameterPath));
         // Save parameter file path
@@ -613,6 +612,21 @@ public class XraySourceGuiMainController implements Initializable {
         // Update window title
         _mainProgram.setParameterName(file.getName());
         
+    }
+    
+    private Optional<String> getExtension(String fileName) {
+        Pattern p = null;
+        try {
+            p = Pattern.compile("^(.*)\\.(.*)$");
+        } catch (PatternSyntaxException pse) {
+            System.out.println("Pattern syntax error!");
+            return Optional.empty();
+        }
+        Matcher m = p.matcher(fileName);
+        if (!m.matches()) {
+            return Optional.empty();
+        }
+        return Optional.of("." + m.group(2));
     }
 
     private int verifyInputParameters() {
