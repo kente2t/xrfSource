@@ -1,5 +1,25 @@
 /*
  * XMLRoot.java
+ * 
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.  
  */
 package se.e2t.xraymisc;
 
@@ -18,7 +38,7 @@ import org.xml.sax.SAXException;
 /**
  * Class is used for initial verification of XML files.
  *
- * @author Kent Ericsson
+ * @author Kent Ericsson, e2t AB
  */
 public class XMLRoot {
 
@@ -50,6 +70,12 @@ public class XMLRoot {
         return retval;
     }
 
+    /**
+     * Method to input XML file root data
+     *
+     * @param inputStream = Stream of XML data.
+     * @return = 0 if no error occured, else a positive error code is returned.
+     */
     @SuppressWarnings("null")
     private int readFile(InputStream is) {
         int retval = 0;
@@ -79,7 +105,7 @@ public class XMLRoot {
     }
 
     /**
-     * Method to get the root tag name
+     * Method to get the root tag name.
      *
      * @return = root tag name
      */
@@ -92,7 +118,7 @@ public class XMLRoot {
     }
 
     /**
-     * Method to get the value a root tag attribute
+     * Method to get the value a root tag attribute.
      *
      * @param attributeName = attribute to look for
      * @return = string containing attribute value or null

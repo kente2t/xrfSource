@@ -32,7 +32,7 @@ public abstract class SourceCalculation {
         double startWavelength = Inparameters.CONV_KEV_ANGSTROM / inParameters.getTubeVoltage();
 
         // Find center wavelength of first full spectrum slice
-        double normalSlice = inParameters.getContiniumIntervalSize();
+        double normalSlice = inParameters.getContinuumIntervalSize();
         double centerWavelength = startWavelength + (normalSlice / 2.0d);
         double sliceUpper = centerWavelength + (normalSlice / 2.0d);
         double maxWavelength = inParameters.getMaxWavelength();
@@ -253,7 +253,7 @@ public abstract class SourceCalculation {
                     sPart.setIntensity(sPart.getIntensity() * wTrans * fTrans);
                 });
         // Adjust continium slices
-         outputData.getContinium().stream()
+         outputData.getContinuum().stream()
                 .forEach(sPart ->{
                     double waveLength = sPart.getWavelength();
                     double wTrans = getWindowTransferFactor(windowZ, waveLength, windowThickness);
@@ -285,7 +285,7 @@ public abstract class SourceCalculation {
         
         // Normalize continium slices
         
-         outputData.getContinium().stream()
+         outputData.getContinuum().stream()
                 .forEach(sPart -> sPart.setIntensity(normFac * sPart.getIntensity()));
     }
 }

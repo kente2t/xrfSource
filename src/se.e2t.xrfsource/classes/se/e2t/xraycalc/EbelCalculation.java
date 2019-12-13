@@ -1,5 +1,25 @@
 /*
  * EbelCalculation.java
+ * 
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -16,10 +36,12 @@ import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 
 /**
  *
- * @author Kent
+ * @author Kent Ericsson, e2t AB.
  * 
- * * Class calculates an x-ray tube spectrum accordinbg to an algorith published
+ * Class calculates an x-ray tube spectrum accordinbg to an algorith published
  * by Horst Ebel working at The Technical University in Vienna.
+ * Class implements a couple of abstract methods declared in the parent class
+ * SourceCalculation.
  *
  * Publications:
  * 1. X-ray Tube Spectra. Horst Ebel, X-ray Spectrometry, Vol 28,pages 255-266.
@@ -32,6 +54,13 @@ public class EbelCalculation extends SourceCalculation {
         super();
     }
 
+    /**
+     * Method produces an intensity per Angstrom value for a certain wavelength.
+     * @param inParameters reference to parameters input via GUI.
+     * @param wavelength wavelength in Angstrom.
+     * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
+     * @return calculated intensity per Angstrom value.
+     */
     @Override
     protected double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth) {
@@ -101,6 +130,13 @@ public class EbelCalculation extends SourceCalculation {
         return rouZ;
     }
 
+    /**
+     * Method calculates intensities of the characteristic lines of the x-ray tube.
+     * Intensity is returned as a per Angstrom. The natural width of the line is
+     * used to get this per Angstrom value.
+     * @param inParameters reference to parameters input via GUI.
+     * @param outputData an XarySpectrum object containing the calculated values.
+     */
     @Override
     protected void calculateTubeLineIntensities(Inparameters inParameters,
             XraySpectrum outputData) {
@@ -160,14 +196,8 @@ public class EbelCalculation extends SourceCalculation {
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
                         // Convert line integrated intensity to per Angstrom value
                         double intensity = constK * sPowFactor * r * omegaJK * pJKL * fFunction;
-                        System.out.println("\nl = " + xrfLine.toString() +
-                                " w = " + wavelength + " const = " + constK +
-                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
-                                " p = " + pJKL + " f = " + fFunction +
-                                " rouZ = " + rouZ + " tau = " + tau +                        
-                                " lw = " + lineWidth + " i = " + intensity +
-                                " st = " + intensity / lineWidth);
-
+                        
+                        // Store calculated value
                         allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
                     }
                 });
@@ -228,14 +258,6 @@ public class EbelCalculation extends SourceCalculation {
                         }
                         // Calculate line intensity
                         double intensity = constX * sPowFactor * r * omegaJK * pJKL * fFunction;
-                        
-                        System.out.println("\nl = " + xrfLine.toString() +
-                                " w = " + wavelength + " cX = " + constX +
-                                " sP = " + sPowFactor + " r = " + r + " y = " + omegaJK +
-                                " p = " + pJKL + " f = " + fFunction +
-                                " rouZ = " + rouZ + " tau = " + tau +
-                                " lw = " + lineWidth + " i = " + intensity +
-                                " st = " + intensity / lineWidth);
                         
                         // Store calculated intensity converted to a per angstrom value
                         allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));

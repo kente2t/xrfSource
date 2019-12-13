@@ -32,7 +32,7 @@ public class Inparameters {
     private final List<FilterElement> _filterElements;
     private double _filterThickness;
     private double _tubeVoltage;
-    private double _continiumIntervalSize;
+    private double _continuumIntervalSize;
     private double _maxWavelength;
     private Algorithm _algorithm;
     private boolean _splitAtAbsEdge;
@@ -92,7 +92,7 @@ public class Inparameters {
         _windowThickness = 50.0d;
         _filterThickness = 0.0d;
         _tubeVoltage = 50.0d;
-        _continiumIntervalSize = 0.1d;
+        _continuumIntervalSize = 0.1d;
         _maxWavelength = 12.0d;
         _algorithm = getAlgorithms().get(0);
         _splitAtAbsEdge = true;
@@ -146,8 +146,8 @@ public class Inparameters {
         return _tubeVoltage;
     }
 
-    public double getContiniumIntervalSize() {
-        return _continiumIntervalSize;
+    public double getContinuumIntervalSize() {
+        return _continuumIntervalSize;
     }
 
     public double getMaxWavelength() {
@@ -189,7 +189,7 @@ public class Inparameters {
     }
 
     public void setContiniumIntervalSize(double continiumIntervalSize) {
-        this._continiumIntervalSize = continiumIntervalSize;
+        this._continuumIntervalSize = continiumIntervalSize;
     }
 
     public void setMaxWavelength(double maxWavelength) {

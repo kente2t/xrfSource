@@ -25,7 +25,7 @@ public class XraySpectrum {
         return _tubeLines;
     }
 
-    public List<SpectrumPart> getContinium() {
+    public List<SpectrumPart> getContinuum() {
         return _continium;
     }
     

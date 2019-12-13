@@ -1,5 +1,25 @@
 /*
  * File: XraySourceGuiMainController.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraygui;
 
@@ -44,12 +64,10 @@ import se.e2t.xraycalc.EbelCalculation;
 import se.e2t.xraycalc.FinPavCalculation;
 import se.e2t.xraycalc.Inparameters;
 import static se.e2t.xraycalc.Inparameters.getAlgorithms;
-import static se.e2t.xraycalc.Inparameters.Algorithm;
 import se.e2t.xraycalc.Inparameters.CalcModel;
 import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import static se.e2t.xraycalc.Inparameters.getWindowElements;
 import se.e2t.xraycalc.NistCalculation;
-import se.e2t.xraycalc.SourceCalculation;
 import se.e2t.xraycalc.SpectrumFileWriter;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 import se.e2t.xraymisc.OpenSaveParameters;
@@ -61,8 +79,10 @@ import se.e2t.xrfsource.format.spi.SpectrumFormatSPI;
  * @author Kent Ericsson, e2t AB
  *
  * Class contains code that cooperates with the definitions of the Screen
- * Builder FXML file XraySourceGuiMain.fxml. Together those files handle the
- * main GUI of the application.
+ * Builder FXML file XraySourceGuiMain.fxml. Code was initially generated
+ * by marking the fxml file in Netbeans and via rightclick selecting
+ * Make controller.This file and the fxml file handles the main GUI of the
+ * application.
  */
 public class XraySourceGuiMainController implements Initializable {
 
@@ -79,15 +99,14 @@ public class XraySourceGuiMainController implements Initializable {
         "Tube filter",
         "Tube filter thickness",
         "Tube voltage",
-        "X-ray continium interval size",
-        "X-ray continium max wavelength"
+        "X-ray continuum interval size",
+        "X-ray continuum max wavelength"
     };
 
     @FXML
     private TextField _inangle;
     @FXML
     private ChoiceBox<String> _anodeList;
-
     @FXML
     private TextField _xrayOutAngle;
     @FXML
@@ -109,7 +128,7 @@ public class XraySourceGuiMainController implements Initializable {
     @FXML
     private TextField _tubeVoltage;
     @FXML
-    private TextField _continiumSlice;
+    private TextField _continuumSlice;
     @FXML
     private Button _generateFileButton;
     @FXML
@@ -123,6 +142,8 @@ public class XraySourceGuiMainController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url not used
+     * @param rb not used
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -168,11 +189,10 @@ public class XraySourceGuiMainController implements Initializable {
 
         // Associate filter table columns to TableFilterElement properties
         _elementColumn.setCellValueFactory(
-                new PropertyValueFactory<>("element")
-        );
+                new PropertyValueFactory<>("element"));
         _percentColumn.setCellValueFactory(
-                new PropertyValueFactory<>("conc")
-        );
+                new PropertyValueFactory<>("conc"));
+        
         // Define a renderer for the conc column
         _percentColumn.setCellFactory(column -> {
             return new TableCell<TableFilterElement, Double>() {
@@ -190,17 +210,20 @@ public class XraySourceGuiMainController implements Initializable {
                 }
             };
         });
+        
         // Connect data to table
         _filterTable.setItems(_filterElements);
         
-        // Indicate no input file so far
-        
+        // Indicate no input file so far, select current directory
         _lastParamFilePath = null;
         _lastDirectoryPath = System.getProperty("user.dir");
     }
 
-    // Method called from main to send reference to primary stage
-    // and to get a reference to the inparameter object.
+    /**
+     * Method called from main to send reference to primary stage
+     * and to get a reference to the inparameter object.
+     * @param mainProgram
+     */
     public void setMainProgram(Guistart mainProgram) {
         _mainProgram = mainProgram;
 
@@ -222,10 +245,13 @@ public class XraySourceGuiMainController implements Initializable {
                 _anodeList.getSelectionModel().select(i);
             }
         }
-        // Incident electrons angle
+        
+        // Incident electron input angle
         _inangle.setText(String.format("%.1f", parameters.getInAngle()));
+        
         // Outgoing photons angle
         _xrayOutAngle.setText(String.format("%.1f", parameters.getOutAngle()));
+        
         // Tube window ChoiceList
          for (int i = 0; i < Inparameters.getWindowElements().size(); i++) {
             if (Inparameters.getWindowElements().get(i).getAtomicNumber() ==
@@ -233,50 +259,73 @@ public class XraySourceGuiMainController implements Initializable {
                 _tubeWindowElement.getSelectionModel().select(i);
             }
         }
+         
         // Tube window thickness
         _windowThickness.setText(String.format("%.0f", parameters.getWindowThickness()));
+        
         // Tube filter table
         _filterElements.clear();
         parameters.getFilterElements().stream()
                 .forEach(fElement
                         -> _filterElements.add(new TableFilterElement(fElement.getSelectedElement().getSymbol(),
                         100.0d * fElement.getConc())));
+        
         // Tube filter thickness
         _filterThickness.setText(String.format("%.0f", parameters.getFilterThickness()));
+        
         // Tube voltage
         _tubeVoltage.setText(String.format("%.1f", parameters.getTubeVoltage()));
-        // Continium interval size
-        _continiumSlice.setText(String.format("%.3f", parameters.getContiniumIntervalSize()));
+        
+        // Continuum interval size
+        _continuumSlice.setText(String.format("%.3f", parameters.getContinuumIntervalSize()));
+        
         // Split at absorption edge
         _splitAtAbsEdge.setSelected(parameters.isSplitAtAbsEdge());
+        
         // Max wavelength
         _maxWavelength.setText(String.format("%.1f", parameters.getMaxWavelength()));
+        
         // Calculation algorithm ChoiceList
         _algSelection.getSelectionModel().select(getAlgorithms().indexOf(parameters.getAlgorithm()));
     }
 
-    // Listener for selections in the anode element choicebox
+    /**
+     * Listener for selections in the anode element choicebox
+     */
     private void newAnodeElement(int oldIndex, int newIndex) {
         _inParameters.setAnodeElement(newIndex);
     }
 
-    // Listener for selections in the window element choicebox
+    /**
+     * Listener for selections in the window element choicebox
+     * @param oldIndex
+     * @param newIndex 
+     */
     private void newWindowElement(int oldIndex, int newIndex) {
         _inParameters.setWindowElement(newIndex);
     }
 
-    // Listener for selections in algoritm choicebox
+    /**
+     * Listener for selections in algoritm choicebox
+     * @param oldIndex
+     * @param newIndex 
+     */
     private void newAlgorithm(int oldIndex, int newIndex) {
         _inParameters.setAlgorithm(getAlgorithms().get(newIndex));
     }
 
-    // Handler executing when a new angle of ingoing electrons have been input
+    /**
+     * Handler executing when a new angle of ingoing electrons have been input
+     */ 
     @FXML
     private void angle_in(ActionEvent event) {
         verifyInAngle();
     }
 
-    // Handler executing when a tab is entered in ingoing electrons angle text field
+    /** Handler executing when a tab is entered in ingoing electrons angle text field
+     * 
+     * @param event 
+     */
     @FXML
     private void angle_in_key_pressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -295,14 +344,20 @@ public class XraySourceGuiMainController implements Initializable {
         }
         return dInput;
     }
-    // Handler executing when a new angle of outoing photons have been input
-
+    
+    /**
+     * Handler executing when a new angle of outoing photons have been input.
+     * @param event 
+     */
     @FXML
     private void angleOut(ActionEvent event) {
         verifyAngleOut();
     }
 
-    // Handler executing when a tab is entered in outgoing photons angle text field
+    /** Handler executing when a tab is entered in outgoing photons angle text field.
+     * 
+     * @param event 
+     */
     @FXML
     private void angleOutKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -322,7 +377,10 @@ public class XraySourceGuiMainController implements Initializable {
         return dInput;
     }
 
-    // Handler executing when a new tube thickness have been input
+    /** Handler executing when a new tube thickness have been input.
+     * 
+     * @param event 
+     */
     @FXML
     private void windowThicknessKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -332,7 +390,11 @@ public class XraySourceGuiMainController implements Initializable {
             }
         }
     }
-
+    
+    /** Handler executing when a new tube thickness have been input.
+     * 
+     * @param event 
+     */
     @FXML
     private void windowThicknessAction(ActionEvent event) {
         verifyWindowThickness();
@@ -346,7 +408,12 @@ public class XraySourceGuiMainController implements Initializable {
         }
         return iInput;
     }
-
+    
+    /**
+     * Method called when Modify Filter button is pressed.
+     * @param event
+     * @throws IOException if fxml file is not found.
+     */
     @FXML
     private void modifyFilterButtonPressed(ActionEvent event) throws IOException {
         final Stage dialog = new Stage();
@@ -364,7 +431,10 @@ public class XraySourceGuiMainController implements Initializable {
         dialog.show();
     }
 
-    // Method called from the modify filter popup window
+    /**
+     * Method called from the modify filter popup window
+     * 
+     */
     public void updateFilterTable() {
         _filterElements.clear();
 
@@ -373,12 +443,22 @@ public class XraySourceGuiMainController implements Initializable {
                         -> _filterElements.add(new TableFilterElement(fElement.getSelectedElement().getSymbol(),
                         100.0d * fElement.getConc())));
     }
-
+    
+    /**
+     * Method called when the filter thickness text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void filterThicknessAction(ActionEvent event) {
         verifyFilterThickness();
     }
-
+    
+    /**
+     * Method called when the filter thickness text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void filterThicknessKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -397,12 +477,22 @@ public class XraySourceGuiMainController implements Initializable {
         }
         return iInput;
     }
-
+    
+    /**
+     * Method is called when the tube voltage text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void tubeVoltageAction(ActionEvent event) {
         verifyTubeVoltage();
     }
-
+    
+    /**
+     * Method is called when the tube voltage text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void tubeVoltageKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -421,24 +511,34 @@ public class XraySourceGuiMainController implements Initializable {
         }
         return dInput;
     }
-
+    
+    /**
+     * Method is called when the continuum slice text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
-    private void continiumSliceAction(ActionEvent event) {
-        verifyContiniumSlice();
+    private void continuumSliceAction(ActionEvent event) {
+        verifyContinuumSlice();
     }
-
+    
+    /**
+     * Method is called when the continuum slice text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
-    private void continiumSliceKeyPressed(KeyEvent event) {
+    private void continuumSliceKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
-            double dInput = verifyContiniumSlice();
+            double dInput = verifyContinuumSlice();
             if (Double.isNaN(dInput)) {
                 event.consume();
             }
         }
     }
 
-    private double verifyContiniumSlice() {
-        double dInput = VerifyTextInput.getDoubleInput(_continiumSlice, Optional.of(0.001d),
+    private double verifyContinuumSlice() {
+        double dInput = VerifyTextInput.getDoubleInput(_continuumSlice, Optional.of(0.001d),
                 Optional.of(1.0d), "%.3f");
         if (!Double.isNaN(dInput)) {
             _inParameters.setContiniumIntervalSize(dInput);
@@ -446,11 +546,20 @@ public class XraySourceGuiMainController implements Initializable {
         return dInput;
     }
 
+    /**
+     * Method is called when the max wavelength text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void maxWavelengthAction(ActionEvent event) {
         verifyMaxWavelength();
     }
-
+    /**
+     * Method is called when the max wavelength text field is modified.
+     * 
+     * @param event 
+     */
     @FXML
     private void maxWavelengthKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.TAB) {
@@ -469,7 +578,11 @@ public class XraySourceGuiMainController implements Initializable {
         }
         return dInput;
     }
-
+    
+    /**
+     * Method is called when the Generate Spectrum button is pressed.
+     * @param event 
+     */
     @FXML
     private void generateFileButtonAction(ActionEvent event) {
 
@@ -500,6 +613,7 @@ public class XraySourceGuiMainController implements Initializable {
             default:
                 Toolkit.getDefaultToolkit().beep();
         }
+        
         // Count the number of spectrum intervals
          if (outputData == null) {
              Toolkit.getDefaultToolkit().beep();
@@ -510,7 +624,7 @@ public class XraySourceGuiMainController implements Initializable {
             return;
         }
         int numIntervals = outputData.getTubeLines().size() +
-                outputData.getContinium().size();
+                outputData.getContinuum().size();
 
         // Inform number of spectrum intervals
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -537,7 +651,7 @@ public class XraySourceGuiMainController implements Initializable {
             alert.showAndWait();
             return;
         }
-        // add installed providers
+        // Add installed providers
         for (SpectrumFormatSPI service : loader) {
             String description = service.getDescription();
             String extensions = service.getExtensions();
@@ -548,7 +662,7 @@ public class XraySourceGuiMainController implements Initializable {
         byte[] formattedOutput;
         String extension = null;
         if (file == null) {
-            return; // Operator selected cancel
+            return; // Operator selected Cancel
         } else {
             // Format spectrum info using selected formatter
             String SelDescription = fileChooser.getSelectedExtensionFilter().getDescription();
@@ -573,7 +687,8 @@ public class XraySourceGuiMainController implements Initializable {
         }
         // Save directory path
         _lastDirectoryPath = file.getParent();
-        // Add extension to filename if necessary
+        
+        // Add extension to filename if necessary (no ext added by Linux)
         Optional<String> fileExtension = getExtension(file.toString());
         if (fileExtension.isEmpty()) {
             file = new File(file.toString() + extension);
@@ -581,6 +696,8 @@ public class XraySourceGuiMainController implements Initializable {
         else {
             extension = fileExtension.get();
         }
+        
+        // Write generated byte buffer to file
         int retval = SpectrumFileWriter.writeToFile(formattedOutput, file);
         if (retval != 0) {
             alert = new Alert(Alert.AlertType.ERROR,
@@ -607,15 +724,21 @@ public class XraySourceGuiMainController implements Initializable {
             parameterPath = file.toString().replace(extension, ".xml");
         }
         OpenSaveParameters.saveParameters(_inParameters, new File(parameterPath));
+        
         // Save parameter file path
         _lastParamFilePath = file.getPath();
+        
         // Update window title
         _mainProgram.setParameterName(file.getName());
-        
     }
     
+    /**
+     * Method extracts the extension (including ".") from a file path.
+     * @param fileName
+     * @return 
+     */
     private Optional<String> getExtension(String fileName) {
-        Pattern p = null;
+        Pattern p;
         try {
             p = Pattern.compile("^(.*)\\.(.*)$");
         } catch (PatternSyntaxException pse) {
@@ -629,6 +752,10 @@ public class XraySourceGuiMainController implements Initializable {
         return Optional.of("." + m.group(2));
     }
 
+    /**
+     * Method called before generating tube spectrum.
+     * @return 0 if OK, error codes 1-8, see below
+     */
     private int verifyInputParameters() {
         // Verify inparameter data
         if (Double.isNaN(verifyInAngle())) {
@@ -652,7 +779,7 @@ public class XraySourceGuiMainController implements Initializable {
         if (Double.isNaN(verifyTubeVoltage())) {
             return 6;
         }
-        if (Double.isNaN(verifyContiniumSlice())) {
+        if (Double.isNaN(verifyContinuumSlice())) {
             return 7;
         }
         if (Double.isNaN(verifyMaxWavelength())) {
@@ -661,6 +788,10 @@ public class XraySourceGuiMainController implements Initializable {
         return 0;
     }
 
+    /**
+     * Main menu Quit was selected.
+     * @param event 
+     */
     @FXML
     private void quitSelected(ActionEvent event) {
         // Close window
@@ -668,19 +799,31 @@ public class XraySourceGuiMainController implements Initializable {
         stage.close();
     }
 
+    /**
+     * Remove filter button was pressed.
+     * @param event 
+     */
     @FXML
     private void removeFilterButtonPressed(ActionEvent event) {
         _filterElements.clear();
         _inParameters.getFilterElements().clear();
     }
 
+    /**
+     * Method transfers focus to the choicebox list if enter is pressed.
+     * @param event 
+     */
     @FXML
     private void tubeAnodeKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             FocusMove.transferFocus(_anodeList);
         }
     }
-
+    
+    /**
+     * Method transfers focus to the choicebox list if enter is pressed.
+     * @param event 
+     */
     @FXML
     private void tubeWindowElementKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -688,6 +831,10 @@ public class XraySourceGuiMainController implements Initializable {
         }
     }
 
+     /**
+     * Method transfers focus to the choicebox list if enter is pressed.
+     * @param event 
+     */
     @FXML
     private void algSelectKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -695,6 +842,10 @@ public class XraySourceGuiMainController implements Initializable {
         }
     }
 
+    /**
+     * Activated if eneter is pressed when Generate button is focused.
+     * @param event 
+     */
     @FXML
     private void generateFileButtonKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -702,6 +853,10 @@ public class XraySourceGuiMainController implements Initializable {
         }
     }
 
+    /**
+     * Activated if eneter is pressed when Tube filter button is focused.
+     * @param event 
+     */
     @FXML
     private void modifyFilterKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -709,11 +864,14 @@ public class XraySourceGuiMainController implements Initializable {
         }
     }
 
+    /**
+     * Method called when open is selected via menu File-Open.
+     * @param event 
+     */
     @FXML
     private void openSelected(ActionEvent event) {
         
         //Open dialog to choose an input file name
-        
         File file = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Specify parameter file name");
@@ -724,30 +882,29 @@ public class XraySourceGuiMainController implements Initializable {
         file = fileChooser.showOpenDialog(_mainProgram.getPrimaryStage());
         
         // Exit if user pressed cancel
-        
         if (file == null) return;
         
         // Save file path and directory
-        
         _lastParamFilePath = file.getPath();
         _lastDirectoryPath = file.getParent();
         
         // Read parameter data into InParameter object
-        
         _inParameters.getFilterElements().clear();
         OpenSaveParameters.openParameters(_inParameters, file);
         
         // Update parameter display
-        
         _mainProgram.setParameterName(file.getName());
-        
         updateParameterDisplay(_inParameters);
     }
 
+    /**
+     * Method called when save is selected bia menu File-Save.
+     * @param event 
+     */
     @FXML
     private void saveSelected(ActionEvent event) {
 
-        // Go to SaveAs if no inpout file
+        // Go to SaveAs if no input file was read
         String path = _lastParamFilePath;
         if (_lastParamFilePath == null) {
             saveAsSelected(event);
@@ -758,46 +915,57 @@ public class XraySourceGuiMainController implements Initializable {
         }
     }
 
+    /**
+     * Method called when save is selected bia menu File-Save As.
+     * @param event 
+     */
     @FXML
     private void saveAsSelected(ActionEvent event) {
-        
-            // Ask for a file name
-            
-            File file = null;
-               FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Specify parameter file name");
-                fileChooser.setInitialDirectory(
-                        new File(_lastDirectoryPath));
-                fileChooser.getExtensionFilters().add(
-                        new ExtensionFilter("XML Files", "*.xml"));
-                file = fileChooser.showSaveDialog(_mainProgram.getPrimaryStage());
 
-            // Output Parameters to xml file
-            
-            if (file != null) {
-                // Save file and directory path
-                _lastParamFilePath = file.getPath();
-                _lastDirectoryPath = file.getParent();
-                // Output xml
-                OpenSaveParameters.saveParameters(_inParameters, file);
-                // Update window title
-                _mainProgram.setParameterName(file.getName());
-            }
+        // Ask for a file name
+        File file;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Specify parameter file name");
+        fileChooser.setInitialDirectory(
+                new File(_lastDirectoryPath));
+        fileChooser.getExtensionFilters().add(
+                new ExtensionFilter("XML Files", "*.xml"));
+        file = fileChooser.showSaveDialog(_mainProgram.getPrimaryStage());
+
+        if (file != null) {
+
+            // Output parameters to xml file
+            OpenSaveParameters.saveParameters(_inParameters, file);
+
+            // Save file and directory path
+            _lastParamFilePath = file.getPath();
+            _lastDirectoryPath = file.getParent();
+
+            // Update window title
+            _mainProgram.setParameterName(file.getName());
+        }
     }
-
+    
+    /**
+     * Help-About selected from main menu.
+     * @param event 
+     */
     @FXML
     private void aboutProgramSelected(ActionEvent event) {
          Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                "XraySource version " + Guistart.PROG_VER + "\n" +
+                "xrfSource version " + Guistart.PROG_VER + "\n" +
                         "Copyright e2t AB 2019");
-        alert.setTitle("About XraySource");
+        alert.setTitle("About xrfSource");
         alert.setHeaderText(null);
         alert.showAndWait();
     }
 
+    /**
+     * Checkbox "split interval at absorption edge" was changed.
+     * @param event 
+     */
     @FXML
     private void splitCheckBoxPressed(ActionEvent event) {
          _inParameters.setSplitAtAbsEdge(_splitAtAbsEdge.isSelected());
     }
-
 }

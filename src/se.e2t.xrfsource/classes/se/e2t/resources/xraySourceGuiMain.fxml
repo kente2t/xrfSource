@@ -26,7 +26,6 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#openSelected" text="Open…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" onAction="#saveSelected" text="Save" />
             <MenuItem mnemonicParsing="false" onAction="#saveAsSelected" text="Save As…" />
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -35,7 +34,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#aboutProgramSelected" text="About XraySource" />
+            <MenuItem mnemonicParsing="false" onAction="#aboutProgramSelected" text="About xrfSource" />
           </items>
         </Menu>
       </menus>
@@ -128,12 +127,12 @@
                <GridPane.margin>
                   <Insets top="5.0" />
                </GridPane.margin></TextField>
-            <Label text="X-ray continium interval size (Å):" GridPane.rowIndex="9" />
-            <TextField fx:id="_continiumSlice" onAction="#continiumSliceAction" onKeyPressed="#continiumSliceKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <Label text="X-ray continuum interval size (Å):" GridPane.rowIndex="9" />
+            <TextField fx:id="_continuumSlice" onAction="#continuumSliceAction" onKeyPressed="#continuumSliceKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <GridPane.margin>
                   <Insets top="5.0" />
                </GridPane.margin></TextField>
-            <Label text="X-ray continium max wavelength (Å):" GridPane.rowIndex="11" />
+            <Label text="X-ray continuum max wavelength (Å):" GridPane.rowIndex="11" />
             <TextField fx:id="_maxWavelength" onAction="#maxWavelengthAction" onKeyPressed="#maxWavelengthKeyPressed" GridPane.columnIndex="1" GridPane.rowIndex="11">
                <GridPane.margin>
                   <Insets top="5.0" />

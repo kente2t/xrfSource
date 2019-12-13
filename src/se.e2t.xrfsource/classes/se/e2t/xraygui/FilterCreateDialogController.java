@@ -1,5 +1,25 @@
 /*
  * File: FilterCreateDialogController.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraygui;
 
@@ -28,6 +48,8 @@ import se.e2t.xraycalc.Inparameters;
  * FXML Controller class
  *
  * @author Kent Ericsson, e2t AB
+ * 
+ * This class handles the GUI interactions of the define filter pop-up window.
  */
 public class FilterCreateDialogController implements Initializable {
 
@@ -48,7 +70,7 @@ public class FilterCreateDialogController implements Initializable {
     private TextField _concSum;
 
     /**
-     * Initializes the controller class.
+     * Methos initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -70,6 +92,10 @@ public class FilterCreateDialogController implements Initializable {
         _filterElements = new ArrayList<>();
     }
 
+    /**
+     * Keyboard pressed in element concentration text field.
+     * @param event 
+     */
     @FXML
     private void filterElementConcKeyPressed(KeyEvent event) {
 
@@ -87,6 +113,10 @@ public class FilterCreateDialogController implements Initializable {
         }
     }
 
+    /** Operator exits conc text field.
+     * 
+     * @param event 
+     */
     @FXML
     private void filterElementConcOnAction(ActionEvent event) {
 
@@ -96,11 +126,14 @@ public class FilterCreateDialogController implements Initializable {
                 .reduce(0.0d, (a, b) -> a + b);
 
         // Verify data input
-        
         VerifyTextInput.getDoubleInput(_filterElementConc, Optional.of(0.0d),
                 Optional.of(100.0d - 100.0d * cSum), "%.1f");
     }
 
+    /**
+     * Add filter element button pressed.
+     * @param event 
+     */
     @FXML
     private void addFilterElement(ActionEvent event) {
 
@@ -113,56 +146,59 @@ public class FilterCreateDialogController implements Initializable {
         if (VerifyTextInput.isDoubleOK(_filterElementConc, Optional.of(0.0d),
                 Optional.of(100.0d - 100.0d * cSum))) {
 
+            // Add selected filter element
             int selectedIndex = _filterElementSelect.getSelectionModel().getSelectedIndex();
-
             _filterElements.add(new FilterElement(
                     Inparameters.FILTER_ALTERNATIVES.get(selectedIndex).getSymbol(),
                     Inparameters.FILTER_ALTERNATIVES.get(selectedIndex).getAtomicNumber(),
                     0.01d * Double.valueOf(_filterElementConc.getText())));
 
+            // Update sum text field
             cSum = _filterElements.stream()
                     .map(fElement -> fElement.getConc())
                     .reduce(0.0d, (a, b) -> a + b);
-
             _concSum.setText(String.format("%.1f", 100.0d * cSum));
             
             // Preset conc of next element to the remaining to 100%
-            
             _filterElementConc.setText(String.format("%.1f", 100.0d * (1.0d -cSum)));
         }
-
     }
 
+    /**
+     * Store button was pressed.
+     * @param event 
+     */
     @FXML
     private void storeKeyPressed(ActionEvent event) {
-        
+
         // Check if concentration sum is 100%
-        
         double cSum = _filterElements.stream()
                 .map(fElement -> fElement.getConc())
                 .reduce(0.0d, (a, b) -> a + b);
         if (String.format("%.1f", 100.0f * cSum).equals("100.0")) {
 
-        // Copy selected data to the Inparameter object
-        
-        _mainProgram.getInparameters().getFilterElements().clear();
-        _filterElements.stream()
-                .forEach(fElement
-                        -> _mainProgram.getInparameters().getFilterElements()
-                        .add(fElement));
-        
-        // Order parent to update filter table
-        
-        _mainProgram.getPrimaryController().updateFilterTable();
+            // Copy selected data to the Inparameter object
+            _mainProgram.getInparameters().getFilterElements().clear();
+            _filterElements.stream()
+                    .forEach(fElement
+                            -> _mainProgram.getInparameters().getFilterElements()
+                            .add(fElement));
 
-        // close window
-        
-        Stage stage = (Stage) _storeKey.getScene().getWindow();
-        stage.close();
+            // Order parent to update filter table
+            _mainProgram.getPrimaryController().updateFilterTable();
+
+            // close window
+            Stage stage = (Stage) _storeKey.getScene().getWindow();
+            stage.close();
+        } else {
+            Toolkit.getDefaultToolkit().beep();
         }
-        else Toolkit.getDefaultToolkit().beep();
     }
 
+    /** Cancel was pressed.
+     * 
+     * @param event 
+     */
     @FXML
     private void cancelKeyPressed(ActionEvent event) {
         // Close window
@@ -170,6 +206,13 @@ public class FilterCreateDialogController implements Initializable {
         stage.close();
     }
 
+    /**
+     * This method is called from the GUI main controller to give this
+     * class a reference to the parameter storage and to the controller
+     * of the parent window.
+     * .
+     * @param mainProgram 
+     */
     // Method called by controller of parent stage to set the main program reference
     public void setMainProgram(Guistart mainProgram) {
         _mainProgram = mainProgram;

@@ -1,5 +1,25 @@
 /*
  * OpenSaveParameters.java
+ * 
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.   
  */
 package se.e2t.xraymisc;
 
@@ -33,7 +53,7 @@ import se.e2t.xraycalc.Inparameters;
 import se.e2t.xraycalc.Inparameters.Algorithm;
 
 /**
- * Class handles open and save of XraySource parameters from/to an XML file.
+ * Class handles open and save of xrfSource parameters from/to an XML file.
  *
  * @author Kent Ericsson, e2t AB
  */
@@ -66,16 +86,20 @@ public class OpenSaveParameters {
 
     /**
      * Method reads parameters from an xml parameter file into an InParameter
-     * object.
-     *
+     * object. Most of the code aws produced atomatically via a dcd file produced 
+     * by Netbeans from an xml file and then the dcd file was used to produce
+     * input scanner code.
+     * 
+     *@param file input file
+     * @param parameters reference to parameter storage.
      */
     @SuppressWarnings("null")
     public static void openParameters(Inparameters parameters, File file) {
-        DocumentBuilder builder = null;
-        Document document = null;
+        DocumentBuilder builder;
+        Document document;
 
         // Verify file root tag
-        XMLRoot fileRoot = null;
+        XMLRoot fileRoot;
         fileRoot = new XMLRoot();
         if (fileRoot.readFile(file) != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -88,14 +112,13 @@ public class OpenSaveParameters {
         rootName = fileRoot.getRootTagName();
         if (rootName.compareTo(ROOT_TAG) != 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
-                    "Sorry, root tag " + rootName + " is not correct for an XraySource parameter file!");
+                    "Sorry, root tag " + rootName + " is not correct for an xrfSource parameter file!");
             alert.setHeaderText(null);
             alert.showAndWait();
             return;
         }
         // Verify version of program that created file
-
-        String pgmVersion = null;
+        String pgmVersion;
         pgmVersion = fileRoot.getAttributeValue(ATTR_VERS);
         if (pgmVersion == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -123,7 +146,6 @@ public class OpenSaveParameters {
             alert.showAndWait();
             return;
         }
-        document = null;
         try {
             document = builder.parse(new InputSource(new FileInputStream(file)));
         } catch (SAXException | IOException ex) {
@@ -421,7 +443,6 @@ public class OpenSaveParameters {
                     "Error saving XML file!\nretval = " + retv);
             alert.setHeaderText(null);
             alert.showAndWait();
-            return;
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     "Parameters have been saved to xml file!");
@@ -431,6 +452,12 @@ public class OpenSaveParameters {
         }
     }
 
+    /**
+     * Method stores xrfSource parameters in an xml file.
+     * @param parameters reference to parameters
+     * @param file output file
+     * @return = 0 if OK, error code 1-6 if error, se below.
+     */
     @SuppressWarnings("null")
     private static int outputXML(Inparameters parameters, File file) {
         FileWriter writer = null;
@@ -439,9 +466,8 @@ public class OpenSaveParameters {
         StringWriter sw = null;
         String xmlString = null;
         int retval = 0;
-        /*
-         * Get a DOM document
-         */
+        
+        // Get a DOM document
         DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = null;
         try {
@@ -467,8 +493,8 @@ public class OpenSaveParameters {
             root.setAttribute(ATTR_WINDOW_THICKNESS, String.valueOf(parameters.getWindowThickness()));
             root.setAttribute(ATTR_FILTER_THICKNESS, String.valueOf(parameters.getFilterThickness()));
             root.setAttribute(ATTR_ANODE_VOLTAGE, String.valueOf(parameters.getTubeVoltage()));
-            root.setAttribute(ATTR_INTERVAL_SIZE, String.valueOf(parameters.getContiniumIntervalSize()));
-              root.setAttribute(ATTR_SPLIT_INTERVAL_AT_EDGE, String.valueOf(parameters.isSplitAtAbsEdge()));
+            root.setAttribute(ATTR_INTERVAL_SIZE, String.valueOf(parameters.getContinuumIntervalSize()));
+            root.setAttribute(ATTR_SPLIT_INTERVAL_AT_EDGE, String.valueOf(parameters.isSplitAtAbsEdge()));
             root.setAttribute(ATTR_MAX_WAVELENGTH, String.valueOf(parameters.getMaxWavelength()));
             doc.appendChild(root);
 
