@@ -33,7 +33,7 @@ import static se.e2t.xraycalc.Inparameters.CalcModel.NIST;
  *
  * @author Kent Ericsson, e2t AB
  * 
- * Class stores the parameters to be used for the x-ray spectrum calculations.
+ * Class stores the parameters to be used for the xrfSource spectrum calculations.
  * 
  */
 public class Inparameters {
@@ -41,7 +41,6 @@ public class Inparameters {
     public static final double CONV_KEV_ANGSTROM = 12.398d;
     public static final double ANGLE_CONV = Math.PI / 180.0d;
     public static final String THIS_PROGRAM_VERSION = "2.0.0";
-    public static final int NUM_AVERAGE = 100;
     private String _programVersion;
     private String _algDescription;
     private TubeElement _anodeElement;

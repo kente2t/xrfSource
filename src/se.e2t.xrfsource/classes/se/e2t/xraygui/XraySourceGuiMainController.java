@@ -872,7 +872,7 @@ public class XraySourceGuiMainController implements Initializable {
     private void openSelected(ActionEvent event) {
         
         //Open dialog to choose an input file name
-        File file = null;
+        File file;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Specify parameter file name");
         fileChooser.setInitialDirectory(

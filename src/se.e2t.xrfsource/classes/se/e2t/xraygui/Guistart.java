@@ -77,14 +77,17 @@ public class Guistart extends Application {
         stage.show();
     }
 
-    // This is the start of the program
-    // the launch method will start the Java FX Application by first calling
-    // the init method, then the start method.
+    /** This is the start of the program
+     * the launch method will start the Java FX Application by first calling
+     * the init method, then the start method.
+     * @param args program start parameters
+     */
     public static void main(String[] args) {
         launch(args);
     }
     /**
      * To get the reference to the Application primary stage.
+     * @return reference to the GUI primary stage.
      */
     public Stage getPrimaryStage() {
         return _primaryStage;
@@ -92,6 +95,7 @@ public class Guistart extends Application {
     
     /**
      * To get a reference to the program input parameters.
+     * @return reference to inparameter storage.
      */
     public Inparameters getInparameters() {
         return _inParameters;
@@ -99,6 +103,7 @@ public class Guistart extends Application {
     
     /**
      * To get a reference to the program primary controller.
+     * @return reference to main GUI controller class.
      */
     public XraySourceGuiMainController getPrimaryController() {
         return _primaryController;
@@ -106,6 +111,7 @@ public class Guistart extends Application {
     
     /**
      * To display the program name in the top of the program window.
+     * @param name file name to be displayed together with the program name.
      */
     public void setParameterName(String name) {
         _primaryStage.setTitle(name + PROG_TITLE_STRING);

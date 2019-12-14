@@ -71,6 +71,8 @@ public class FilterCreateDialogController implements Initializable {
 
     /**
      * Methos initializes the controller class.
+     * @param url not used
+     * @param rb not used
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

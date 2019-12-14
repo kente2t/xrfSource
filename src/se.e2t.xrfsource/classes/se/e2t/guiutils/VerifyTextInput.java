@@ -4,7 +4,6 @@
 package se.e2t.guiutils;
 
 import java.awt.Toolkit;
-import static java.lang.Float.NaN;
 import java.util.Optional;
 import javafx.scene.control.TextField;
 

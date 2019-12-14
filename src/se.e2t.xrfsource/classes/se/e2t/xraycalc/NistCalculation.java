@@ -72,7 +72,7 @@ public class NistCalculation extends SourceCalculation {
         super();
     }
 
-    private static class NistInfo {
+    public static class NistInfo {
 
         private final double _a;
         private final double _b;
