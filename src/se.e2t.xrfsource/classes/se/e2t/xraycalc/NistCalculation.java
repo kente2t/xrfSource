@@ -1,6 +1,27 @@
 /*
  * NistCalculation.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package se.e2t.xraycalc;
 
 import se.e2t.abscoeffcalculate.AbsCoefficient;
@@ -34,6 +55,8 @@ import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
  */
 public class NistCalculation extends SourceCalculation {
 
+    // Constants from page 131 in the first paper and from page 109 in the 
+    // second paper.
     private static final Map<XrfLine, NistInfo> NIST_PAR;
 
     static {
@@ -78,6 +101,13 @@ public class NistCalculation extends SourceCalculation {
         return NIST_PAR;
     }
 
+    /**
+     * Method produces an intensity per Angstrom value for a certain wavelength.
+     * @param inParameters reference to parameters input via GUI.
+     * @param wavelength wavelength in Angstrom.
+     * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
+     * @return calculated intensity per Angstrom value.
+     */
     @Override
     protected double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth) {
@@ -88,7 +118,6 @@ public class NistCalculation extends SourceCalculation {
         double takeOffAngle = inParameters.getOutAngle() * Inparameters.ANGLE_CONV;
         double minWl = Inparameters.CONV_KEV_ANGSTROM / inParameters.getTubeVoltage();
         double f = getPellaF(z, wavelength, takeOffAngle, minWl);
-//        System.out.println("Lambda = " + wavelength + " C = " + c + " F = " + Math.sqrt(1.0d / f) + " xi = " + xi);
 
         // Calculate intensity
         return (f * 2.72e-6d * (double) z * ((wavelength / minWl - 1.0d) / (wavelength * wavelength)));
@@ -145,7 +174,14 @@ public class NistCalculation extends SourceCalculation {
         return (double) n * lYield * curledBracket;
 
     }
-
+    
+    /**
+     * Method calculates intensities of the characteristic lines of the x-ray tube.
+     * Intensity is returned as a per Angstrom. The natural width of the line is
+     * used to get this per Angstrom value.
+     * @param inParameters reference to parameters input via GUI.
+     * @param outputData an XarySpectrum object containing the calculated values.
+     */
     @Override
     protected void calculateTubeLineIntensities(
             Inparameters inParameters, XraySpectrum outputData) {
@@ -193,9 +229,6 @@ public class NistCalculation extends SourceCalculation {
                         double lineIntegralInt = ratio
                                 * getContiniumIntensity(inParameters,
                                         wavelength, 0.0d); // Width is not used in the Pella algorithm
-//                        System.out.println(xrfLine.toString() + " U0 = " + u0
-//                                + " Exponent = " + exponent + " p1 = " + fac1
-//                                + " p2 = " + fac2 + " p3 = " + fac3);
                         // Get line energy
                         double lineEnergy = lineInfo.getEnergy();
                         // get line width in eV
@@ -247,6 +280,13 @@ public class NistCalculation extends SourceCalculation {
                 .forEach(specPart -> outputData.getTubeLines().add(specPart));
     }
 
+    /**
+     * Method calculates the intensities of the L lines according to the second paper
+     * @param inParameters parameters input by the operator
+     * @param lA12Intensity Intensity of L-alpha12 used as a reference
+     * @param z atomic number
+     * @return List of SpectrumPart objects describinbg the line intensities.
+     */
     private static List<SpectrumPart> getLlines(
             Inparameters inParameters,
             Double lA12Intensity,

@@ -135,7 +135,7 @@ public class EbelCalculation extends SourceCalculation {
      * Intensity is returned as a per Angstrom. The natural width of the line is
      * used to get this per Angstrom value.
      * @param inParameters reference to parameters input via GUI.
-     * @param outputData an XarySpectrum object containing the calculated values.
+     * @param outputData an XraySpectrum object containing the calculated values.
      */
     @Override
     protected void calculateTubeLineIntensities(Inparameters inParameters,

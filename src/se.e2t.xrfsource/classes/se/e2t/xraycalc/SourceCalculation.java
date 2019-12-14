@@ -1,12 +1,31 @@
 /*
  * SourceCalculation.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
 import se.e2t.abscoeffcalculate.AbsCoefficient;
 import se.e2t.abscoeffcalculate.Mucal;
 import java.util.List;
-import java.util.Map;
 import se.e2t.xrfsource.spectrumclasses.SpectrumPart;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 
@@ -183,14 +202,38 @@ public abstract class SourceCalculation {
     }
     
     // This method is implemented by the classes extending this class
+    /**
+     * This method which is implemented by the classes extending this class
+     * calculates continuum intensities.
+     * 
+     * @param inParameters reference to parameters input via GUI.
+     * @param wavelength wavelength in Angstrom.
+     * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
+     * @return calculated intensity per Angstrom value.
+     */
     protected abstract double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth);
 
     // This method is implemented by the classes extending this class
+    /**
+     * This method which is implemented by the classes extending this class
+     * calculates intensities of the characteristic lines of the x-ray tube.
+     * Intensity is returned as a per Angstrom. The natural width of the line is
+     * used to get this per Angstrom value.
+     * 
+     * @param inParameters reference to parameters input via GUI.
+     * @param outputData an Xraypectrum object containing the calculated values.
+     */
     protected abstract void calculateTubeLineIntensities(
             Inparameters inParameters,
             XraySpectrum outputData);
     
+    /**
+     * Method converts a width in eV to a width in Angstrom.
+     * @param lineEnergy line energy in keV.
+     * @param eWidth width in eV.
+     * @return width in Angstrom.
+     */
     protected static double getLineWidth(double lineEnergy, double eWidth) {
         // get half of line width in keV
         double halfEwidth = 0.5d * 0.001d * eWidth;
@@ -201,6 +244,13 @@ public abstract class SourceCalculation {
                 / (lineEnergy + halfEwidth)));
     }
     
+   /**
+    * Method transfer a transfer factor for the tube window.
+    * @param atomicNumber atomic number
+    * @param wavelength wavelength in Angstrom
+    * @param thickness window thickness in micrometeter
+    * @return transfer factor to multiply intensity
+    */
     private static double getWindowTransferFactor(
             int atomicNumber,
             double wavelength, //Angstrom
@@ -212,6 +262,14 @@ public abstract class SourceCalculation {
         return Math.exp(-attCoeff * cmThickness);
     }
     
+    /**
+     * Method calculates a transfer factor for a tube primary filter.
+     * 
+     * @param filterElements List of FilterElements describing the filter components.
+     * @param wavelength wavelength
+     * @param thickness filter thickness in micrometer.
+     * @return transfer factor to multiply intensity
+     */
     private static double getFilterTransferFactor(
             List<FilterElement> filterElements,
             double wavelength,
@@ -229,6 +287,11 @@ public abstract class SourceCalculation {
         return Math.exp(-attCoeff * cmThickness);
     }
     
+   /**
+    * Method adjusts intensities depending on tube window and tube filter attenuation.
+    * @param inParameters parameters of tube window and filter input by operatior.
+    * @param outputData adjusted tube spectrum intensities in XraySpectrum object.
+    */
     private static void windowFilterAdjustment(
             Inparameters inParameters,
             XraySpectrum outputData) {
@@ -265,26 +328,29 @@ public abstract class SourceCalculation {
                 });
     }
     
+    /**
+     * Method normalizes calculated spectrum with a factor depending on sn
+     * input parameter and the max integrated intensity of a charcteristic line.
+     * 
+     * @param outputData adjusted tube spectrum intensities in XraySpectrum object.
+     * @param maxPeak value of max integrated peak intensity used for normalization.
+     */
     private static void normalizeIntensities(XraySpectrum outputData, double maxPeak) {
         
         // Get max integrated tube line intensity
-        
         double mPeak = outputData.getTubeLines().stream()
                 .map(sPart -> sPart.getIntensity() * sPart.getWindow())
                 .max(Double::compare)
                 .get();
         
         // Get factor for normalizing
-        
         double normFac = maxPeak / mPeak;
      
         // Normalize peaks
-        
         outputData.getTubeLines().stream()
                 .forEach(sPart -> sPart.setIntensity(normFac * sPart.getIntensity()));
         
         // Normalize continium slices
-        
          outputData.getContinuum().stream()
                 .forEach(sPart -> sPart.setIntensity(normFac * sPart.getIntensity()));
     }

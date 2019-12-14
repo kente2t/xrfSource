@@ -1,5 +1,25 @@
 /*
  * FinPavCalculation.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -26,12 +46,13 @@ import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
  * A.L. Finkelshtein and T.O. Pavlova, X-ray Spectrometry,
  * Vol 28,pages 27-32 (1999).
  
- * @author Kent
+ * @author Kent Ericsson, e2t AB
  */
 public class FinPavCalculation extends SourceCalculation {
     
-        private static final Map<Integer, Double> A_EXPONENT;
+    private static final Map<Integer, Double> A_EXPONENT;
 
+    // Exponent values according to page 28 in the paper (1.)
     static {
         A_EXPONENT = new HashMap<>();
         A_EXPONENT.put(24, 0.23d);
@@ -42,6 +63,14 @@ public class FinPavCalculation extends SourceCalculation {
     public FinPavCalculation() {
         super();
     }
+    
+    /**
+     * Method produces an intensity per Angstrom value for a certain wavelength.
+     * @param inParameters reference to parameters input via GUI.
+     * @param wavelength wavelength in Angstrom.
+     * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
+     * @return calculated intensity per Angstrom value.
+     */
     @Override
     protected double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth) {
@@ -75,6 +104,18 @@ public class FinPavCalculation extends SourceCalculation {
         return nPhotons;
     }
     
+    /**
+     * Method calculates the f factor or function according to page 28 in the paper.
+     * 
+     * @param z atomic number
+     * @param outAngle angle of photons existing the anode, relative to anode
+     *        surface (degrees). 
+     * @param energy0 Incoming electron energy (keV)
+     * @param energy  energy of outgoing photon (KeV).
+     * @param sigma sigma calculated according to formulas on papge 28 in
+     *        the paper (different for continuum and lines).
+     * @return factor value.
+     */
     private double getFfactor(int z, double outAngle, double energy0,
             double energy, double sigma) {
         double h = 1.2d * AtomicWeights.getRelAtomicWeight(z) / (double) (z * z);
@@ -87,6 +128,18 @@ public class FinPavCalculation extends SourceCalculation {
         return fFactor;
     }
     
+    /**
+     * Method calculates the backscattering factor according to page 379 in the
+     * book, reference 14 in the paper. Note that the formula of R2 in the book
+     * is incorrect. The formula has an offset value of +0.1836. Shall be -0.1836.
+     * 
+     * @param z atomic number
+     * @param energy0 Incoming electron energy (keV)
+     * @param energy energy of outgoing photon (KeV) for the continuum,
+     *        the energy of absorption edge of the current line when factor
+     *        is used in the line intensity calculations.
+     * @return calculated factor.
+     */
     private double getRfactor(int z, double energy0, double energy) {
         // Calculation of the backscattering factor R according to page 379
         // in the book referenced (no. 14) in the paper by Finkelshtein and Pavlova.
@@ -102,6 +155,13 @@ public class FinPavCalculation extends SourceCalculation {
         return rFactor;
     }
     
+    /**
+     * Method calculates intensities of the characteristic lines of the x-ray tube.
+     * Intensity is returned as a per Angstrom. The natural width of the line is
+     * used to get this per Angstrom value.
+     * @param inParameters reference to parameters input via GUI.
+     * @param outputData an XraySpectrum object containing the calculated values.
+     */
     @Override
     protected void calculateTubeLineIntensities(Inparameters inParameters, XraySpectrum outputData) {
         
@@ -117,7 +177,6 @@ public class FinPavCalculation extends SourceCalculation {
                 = TubeLines.getMajorLineInfo();
         final double neK = 2.0d;
         final double bK = 0.35d * 1.73d;
-
         double energy0 = inParameters.getTubeVoltage();
 
         majorLineInfo.keySet().stream()

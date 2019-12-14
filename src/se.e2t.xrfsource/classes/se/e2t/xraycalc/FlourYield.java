@@ -1,5 +1,25 @@
 /*
  * FlourYield.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -9,7 +29,7 @@ import java.util.Optional;
 
 /**
  *
- * @author Kent
+ * @author Kent Ericsson, e2t AB
  * 
  * Data of this static class is according to This paper:
  * Authors: J.H Hubbell, P.N. Trehan, Nirmal Singh, B. Chand, D. Metha, L. Garg,
@@ -60,6 +80,12 @@ public class FlourYield {
         FLOURESCENCE_YIELDS.put(AbsorptionEdges.AbsEdge.M5_EDGE, M_YIELDS);
     }
 
+    /**
+     * Method return the flourescence yield associated with an absorption edge.
+     * @param atomZ atomic number.
+     * @param edge absorption edge type AbsEdge
+     * @return flourescence yield.
+     */
     public static Optional<Double> getYield(int atomZ, AbsorptionEdges.AbsEdge edge) {
         Optional<Double> retval = Optional.empty();
         if (Optional.ofNullable(FLOURESCENCE_YIELDS.get(edge)).isPresent()) {

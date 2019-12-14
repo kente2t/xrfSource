@@ -1,5 +1,25 @@
 /*
  * TubeLines.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -33,6 +53,10 @@ import static se.e2t.xraycalc.TubeLines.XrfLine.L_IOTA;
  */
 public class TubeLines {
     
+    /**
+     * Enum constants to reference the different characteristic lines handled
+     * by the program..
+     */
     public static enum XrfLine {
         K_ALPHA_12, K_BETA_1, L_ALPHA_12, L_BETA_1, M_ALPHA_12,
          L_ALPHA_1, L_ALPHA_2, L_BETA_2, L_IOTA, L_BETA_3, L_BETA_4,
@@ -64,138 +88,37 @@ public class TubeLines {
 
     private static final Map<Integer, LineInfo> K_ALPHA_12_LINE = new HashMap<>();
 
-//    static {
-//        K_ALPHA_12_LINE = new HashMap<>();
-//        K_ALPHA_12_LINE.put(24, new LineInfo(5.41d, 1.5d, 5.98902d));
-//        K_ALPHA_12_LINE.put(45, new LineInfo(20.21d, 7.8d, 23.22199d));
-//        K_ALPHA_12_LINE.put(74, new LineInfo(59.31d, 44.9d, 69.50850d));
-//    }
-//    ;
-    
     private static final Map<Integer, LineInfo> K_BETA_1_LINE = new HashMap<>();
 
-//    static {
-//        K_BETA_1_LINE = new HashMap<>();
-//        K_BETA_1_LINE.put(24, new LineInfo(5.9468d, 2.220d, 5.98902d));
-//        K_BETA_1_LINE.put(45, new LineInfo(22.7236d, 8.020d, 23.22199d));
-//        K_BETA_1_LINE.put(74, new LineInfo(67.2450d, 46.500d, 69.50850d));
-//    }
-//    ;
-    
     private static final Map<Integer, LineInfo> L_ALPHA_12_LINE = new HashMap<>();
 
-//    static {
-//        L_ALPHA_12_LINE = new HashMap<>();
-//        L_ALPHA_12_LINE.put(45, new LineInfo(2.695d, 3.6d, 3.0020700d));
-//        L_ALPHA_12_LINE.put(74, new LineInfo(8.36d, 8.5d, 10.2d));
-//    }
-//    ;
-    
     private static final Map<Integer, LineInfo> M_ALPHA_12_LINE = new HashMap<>();
 
-//    static {
-//        M_ALPHA_12_LINE = new HashMap<>();
-//        M_ALPHA_12_LINE.put(74, new LineInfo(1.774d, 7.4d, 1.816d));
-//    }
-//    ; 
-    
     private static final Map<Integer, LineInfo> L_ALPHA_1_LINE = new HashMap<>();
-    
-//    static {
-//        L_ALPHA_1_LINE = new HashMap<>();
-//        L_ALPHA_1_LINE.put(45, new LineInfo(2.697d, 3.433d, 0.0d));
-//        L_ALPHA_1_LINE.put(74, new LineInfo(8.398, 8.463d, 0.0d));
-//    }
     
     private static final Map<Integer, LineInfo> L_ALPHA_2_LINE = new HashMap<>();
     
-//    static {
-//        L_ALPHA_2_LINE = new HashMap<>();
-//        L_ALPHA_2_LINE.put(45, new LineInfo(2.692d, 3.833d, 0.0d));
-//        L_ALPHA_2_LINE.put(74, new LineInfo(8.335d, 8.463d, 0.0d));
-//    }  
-    
     private static final Map<Integer, LineInfo> L_BETA_2_LINE = new HashMap<>();
-    
-//    static {
-//        L_BETA_2_LINE = new HashMap<>();
-//        L_BETA_2_LINE.put(45, new LineInfo(3.004d, 3.223d, 0.0d));
-//        L_BETA_2_LINE.put(74, new LineInfo(9.963d, 10.563d, 0.0d));
-//    }  
     
     private static final Map<Integer, LineInfo> L_IOTA_LINE = new HashMap<>();
     
-//    static {
-//        L_IOTA_LINE = new HashMap<>();
-//        L_IOTA_LINE.put(45, new LineInfo(2.370d, 10.823d, 0.0d));
-//        L_IOTA_LINE.put(74, new LineInfo(7.388d, 21.263d, 0.0d));
-//    }  
-    
     private static final Map<Integer, LineInfo> L_BETA_1_LINE = new HashMap<>();
-    
-//    static {
-//        L_BETA_1_LINE = new HashMap<>();
-//        L_BETA_1_LINE.put(45, new LineInfo(2.834d, 2.933d, 0.0d));
-//        L_BETA_1_LINE.put(74, new LineInfo(9.672d, 7.578d, 0.0d));
-//    } 
     
     private static final Map<Integer, LineInfo> L_BETA_3_LINE = new HashMap<>();
     
-//    static {
-//        L_BETA_3_LINE = new HashMap<>();
-//        L_BETA_3_LINE.put(45, new LineInfo(2.915d, 6.250d, 0.0d));
-//        L_BETA_3_LINE.put(74, new LineInfo(9.820d, 12.700d, 0.0d));
-//    } 
-    
     private static final Map<Integer, LineInfo> L_BETA_4_LINE = new HashMap<>();
-    
-//    static {
-//        L_BETA_4_LINE = new HashMap<>();
-//        L_BETA_4_LINE.put(45, new LineInfo(2.891d, 6.250d, 0.0d));
-//        L_BETA_4_LINE.put(74, new LineInfo(9.526d, 14.400d, 0.0d));
-//    } 
     
     private static final Map<Integer, LineInfo> L_ETA_LINE = new HashMap<>();
     
-//    static {
-//        L_ETA_LINE = new HashMap<>();
-//        L_ETA_LINE.put(45, new LineInfo(2.513d, 9.923d, 0.0d));
-//        L_ETA_LINE.put(74, new LineInfo(8.725d, 20.378d, 0.0d));
-//    } 
-    
     private static final Map<Integer, LineInfo> L_GAMMA_1_LINE = new HashMap<>();
-    
-//    static {
-//        L_GAMMA_1_LINE = new HashMap<>();
-//        L_GAMMA_1_LINE.put(45, new LineInfo(3.145d, 3.323d, 0.0d));
-//        L_GAMMA_1_LINE.put(74, new LineInfo(11.285d, 9.978d, 0.0d));
-//    } 
     
     private static final Map<Integer, LineInfo> L_GAMMA_3_LINE = new HashMap<>();
     
-//    static {
-//        L_GAMMA_3_LINE = new HashMap<>();
-//        L_GAMMA_3_LINE.put(45, new LineInfo(3.366d, 7.800d, 0.0d));
-//        L_GAMMA_3_LINE.put(74, new LineInfo(11.676d, 10.500d, 0.0d));
-//    } 
-    
     private static final Map<Integer, LineInfo> L_GAMMA_2_LINE = new HashMap<>();
-    
-//    static {
-//        L_GAMMA_2_LINE = new HashMap<>();
-//    }  
     
     private static final Map<Integer, LineInfo> L_BETA_5_LINE = new HashMap<>();
     
-//    static {
-//        L_BETA_5_LINE = new HashMap<>();
-//    }  
-    
    private static final Map<Integer, LineInfo> L_BETA_6_LINE = new HashMap<>();
-    
-//    static {
-//        L_BETA_6_LINE = new HashMap<>();
-//    }    
     
     private static final Map<XrfLine, Map<Integer, LineInfo>> TUBE_L_LINE_INFO;
 
@@ -229,7 +152,6 @@ public class TubeLines {
     
     // This class has just static methods and is never instatiated-
     // Data is therefore loaded into the data structues by this initializer.
-    
     static {
 
         //Initialize major line data
@@ -281,6 +203,9 @@ public class TubeLines {
                 });
     }
 
+    /**
+     * Class has data of a characteristic x-ray line
+     */
     public static class LineInfo {
 
         private double _energy; //Energy in keV

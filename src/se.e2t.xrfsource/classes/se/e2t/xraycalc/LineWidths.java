@@ -1,5 +1,25 @@
 /*
  * LineWidths.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -9,7 +29,7 @@ import java.util.Optional;
 
 /**
  *
- * @author Kent
+ * @author Kent Ericsson, e2t AB.
  * 
  * Data of this static class are calculated using the natural width of the
  * atomic levels as tabulated in the paper "widths of the atomic K.N7 levels",
@@ -204,6 +224,13 @@ public class LineWidths {
         TUBE_LINE_WIDTHS.put(TubeLines.XrfLine.M_ALPHA_12, M_ALPHA_12_LINEWIDTH);
     }
 
+     /**
+     * Method return the line width of a certain characteristic line of an alement.
+     * 
+     * @param atomZ atomic number.
+     * @param line Characteristic line code ExrfLine.
+     * @return Line width in eV.
+     */
     public static Optional<Double> getTubeLineWidth(int atomZ, TubeLines.XrfLine line) {
         return Optional.ofNullable(TUBE_LINE_WIDTHS.get(line).get(atomZ));
     }

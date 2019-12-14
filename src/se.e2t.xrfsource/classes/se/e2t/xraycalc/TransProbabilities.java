@@ -1,5 +1,25 @@
 /*
  * TransProbabilities.java
+ *
+ * Copyright 2019 e2t AB
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software
+ * is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package se.e2t.xraycalc;
 
@@ -9,7 +29,7 @@ import java.util.Optional;
 
 /**
  *
- * @author Kent
+ * @author Kent Ericsson
  * 
  * Data of this static class are according to
  * 1. J.H. Scofield, Radiative Decay Rates of Vacancies in the K and L Shells,
@@ -232,19 +252,14 @@ public class TransProbabilities {
         TRANS_PROB_DATA.put(TubeLines.XrfLine.M_ALPHA_12, M_ALPHA_12_PROB);
     }
 
+    /**
+     * Method to get the transition probability of a characteristic line.
+     * 
+     * @param atomZ atomic number
+     * @param line characteristic line type XrfLine.
+     * @return transition probability.
+     */
     public static Optional<Double> getTransProb(int atomZ, TubeLines.XrfLine line) {
         return Optional.ofNullable(TRANS_PROB_DATA.get(line).get(atomZ));
     }
-    
-//    static {
-//         TRANS_PROB_DATA.keySet().stream()
-//                .forEach(xrfLine -> {
-//                    System.out.println("\n" + xrfLine.toString());
-//                    TRANS_PROB_DATA.get(xrfLine).keySet().stream()
-//                            .forEach(atomZ -> {
-//                                System.out.println(atomZ + " "
-//                                        + String.format("%.3f", TRANS_PROB_DATA.get(xrfLine).get(atomZ)));
-//                            });
-//                });
-//    }
 }
