@@ -186,7 +186,7 @@ public abstract class SourceCalculation {
                                         centerWavelength, normalSlice)));
                 centerWavelength += normalSlice;
                 sliceUpper += normalSlice;
-            } while (sliceUpper < maxWavelength);
+            } while (sliceUpper < maxWavelength + normalSlice); // to pass max
         }
 
         // Calculate tube line intensities

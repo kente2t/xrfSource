@@ -723,13 +723,14 @@ public class XraySourceGuiMainController implements Initializable {
         else {
             parameterPath = file.toString().replace(extension, ".xml");
         }
-        OpenSaveParameters.saveParameters(_inParameters, new File(parameterPath));
+        File parameterFile = new File(parameterPath);
+        OpenSaveParameters.saveParameters(_inParameters, parameterFile);
         
         // Save parameter file path
-        _lastParamFilePath = file.getPath();
+        _lastParamFilePath = parameterFile.getPath();
         
         // Update window title
-        _mainProgram.setParameterName(file.getName());
+        _mainProgram.setParameterName(parameterFile.getName());
     }
     
     /**
@@ -954,7 +955,8 @@ public class XraySourceGuiMainController implements Initializable {
     private void aboutProgramSelected(ActionEvent event) {
          Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "xrfSource version " + Guistart.PROG_VER + "\n" +
-                        "Copyright e2t AB 2019");
+                        "Copyright e2t AB 2019\n" +
+                        "xrfSource is licenced under The MIT License");
         alert.setTitle("About xrfSource");
         alert.setHeaderText(null);
         alert.showAndWait();

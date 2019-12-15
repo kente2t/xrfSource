@@ -17,4 +17,7 @@ module se.e2t.xrfsource {
     exports se.e2t.xraygui;
     exports se.e2t.xraycalc;
     uses se.e2t.xrfsource.format.spi.SpectrumFormatSPI;
+    provides se.e2t.xrfsource.format.spi.SpectrumFormatSPI
+            with se.e2t.formatters.XrfSourceCsvFormatter,
+            se.e2t.formatters.XrfSourceXmlFormatter;
 }

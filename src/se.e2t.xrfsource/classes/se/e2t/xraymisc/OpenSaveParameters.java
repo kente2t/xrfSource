@@ -482,7 +482,7 @@ public class OpenSaveParameters {
 
             // Add a comment
             Comment comm = doc.createComment("This parameter file "
-                    + "was created by program XraySource " + new Date());
+                    + "was created by program xrfSource " + new Date());
             doc.appendChild(comm);
 
             // Add the root element with its attributes
