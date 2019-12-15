@@ -60,8 +60,8 @@ public class XrfSourceXmlFormatter implements SpectrumFormatSPI {
     private static final String CONTINUUM_ELEMENT_TAG = "Continuum";
     private static final String CONTINUUMSLICE_ELEMENT_TAG = "ContinuumSlice";
     
-    private static final String _description = "xrfSource xml format";
-    private static final String _extensions = "*.xml";
+    private static final String DESCRIPTION = "xrfSource xml format";
+    private static final String EXTENSIONS = "*.xml";
     private int _errorCode;
     private String _errorDescription;
     
@@ -72,12 +72,12 @@ public class XrfSourceXmlFormatter implements SpectrumFormatSPI {
 
     @Override
     public String getDescription() {
-        return _description;
+        return DESCRIPTION;
     }
 
     @Override
     public String getExtensions() {
-        return _extensions;
+        return EXTENSIONS;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class XrfSourceXmlFormatter implements SpectrumFormatSPI {
         Transformer trans = null;
         Document doc = null;
         StringWriter sw = null;
-        String xmlString = null;
+        String xmlString;
         /*
          * Get a DOM document
          */
