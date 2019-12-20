@@ -69,7 +69,7 @@ public class FinPavCalculation extends SourceCalculation {
      * @param inParameters reference to parameters input via GUI.
      * @param wavelength wavelength in Angstrom.
      * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
-     * @return calculated intensity per Angstrom value.
+     * @return total calculated intensity within wavelength interval.
      */
     @Override
     protected double getContiniumIntensity(Inparameters inParameters,
@@ -95,13 +95,10 @@ public class FinPavCalculation extends SourceCalculation {
                 energy, sigma);
         double rFactor = getRfactor(z, energy0, energy);
         // Calculate according to the formula of the paper
-        double nPhotons = 7.52e-5d * zD *(1.0d / wavelength0 - 1.0d / wavelength) *
+        double nPhotonsPerAngstrom = 7.52e-5d * zD *(1.0d / wavelength0 - 1.0d / wavelength) *
                 (1.0d / wavelength) * b * (t / lCont) * fFactor * rFactor * (1.0d / (4.0d * Math.PI));
-        System.out.println("\nw = " + wavelength + " w0 = " + wavelength0 +
-                " a = " + aExponent + " b = " + b + " 1/L = " + 1.0d / lCont +
-                " fFactor = " + fFactor + " rFactor = " + rFactor +
-                " nPhotons = " + nPhotons);
-        return nPhotons;
+        double integratedIntensity = nPhotonsPerAngstrom * wavelengthWidth;
+        return integratedIntensity;
     }
     
     /**
@@ -157,8 +154,8 @@ public class FinPavCalculation extends SourceCalculation {
     
     /**
      * Method calculates intensities of the characteristic lines of the x-ray tube.
-     * Intensity is returned as a per Angstrom. The natural width of the line is
-     * used to get this per Angstrom value.
+     * Intensity is returned as the total intensity of the line together with
+     * a width which is the natural width of the line.
      * @param inParameters reference to parameters input via GUI.
      * @param outputData an XraySpectrum object containing the calculated values.
      */
@@ -216,15 +213,9 @@ public class FinPavCalculation extends SourceCalculation {
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
-                        // Convert line integrated intensity to per Angstrom value
-                        System.out.println("\nl = " + xrfLine.toString() +
-                                " w = " + wavelength + " omegaK = " + omegaK +
-                                " pKL = " + pKL + " first parantesis = " + firstParantesis +
-                                " 1/L = " + 1.0d/lChar + " fFactor = " + fFactor +
-                                " rFactor = " + rFactor + " deltaK = " + deltaK +
-                                " nPhotons = " + nPhotons);
-
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, nPhotons / lineWidth));
+                        
+                        // store calculated intensity
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, nPhotons));
                     }
                 });
 
@@ -271,16 +262,8 @@ public class FinPavCalculation extends SourceCalculation {
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
                         
-                        System.out.println("\nl = " + xrfLine.toString() +
-                                " w = " + wavelength + " omegaK = " + omegaK +
-                                " pKL = " + pKL + " bL = " + bL +
-                                " first parantesis = " + firstParantesis +
-                                " 1/L = " + 1.0d/l + " fFactor = " + fFactor +
-                                " rFactor = " + rFactor +
-                                " nPhotons = " + nPhotons);
-                        
-                        // Store calculated intensity converted to a per angstrom value
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, nPhotons / lineWidth));
+                        // Store calculated intensity
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, nPhotons));
                     }
                 });
         // Sort lines in wavelength order and add to output data

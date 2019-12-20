@@ -59,7 +59,7 @@ public class EbelCalculation extends SourceCalculation {
      * @param inParameters reference to parameters input via GUI.
      * @param wavelength wavelength in Angstrom.
      * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
-     * @return calculated intensity per Angstrom value.
+     * @return total calculated intensity within wavelenth interval.
      */
     @Override
     protected double getContiniumIntensity(Inparameters inParameters,
@@ -83,23 +83,12 @@ public class EbelCalculation extends SourceCalculation {
         double fFactor = (1.0d - Math.exp(-longExpression)) / longExpression;
         double deltaE = Inparameters.CONV_KEV_ANGSTROM / (wavelength - (wavelengthWidth / 2.0d)) -
                 Inparameters.CONV_KEV_ANGSTROM / (wavelength + (wavelengthWidth / 2.0d));
-        double intensity = 1.35e9d * zD
+        double integratedIntensity = 1.35e9d * zD
                 * Math.pow(((energy0 / energy) - 1.0d), xExponent)
                 * fFactor * deltaE;
-         System.out.println("w = " + wavelength);
-        System.out.println("energy0 = " + energy0);
-        System.out.println("energy = " + energy);
-        System.out.println("xExponent = " + xExponent);
-        System.out.println("tauEj = " + tauEj);
-        System.out.println("sinPhi = " + sinPhi);
-        System.out.println("sinEpsilon = " + sinEpsilon);
-        System.out.println("rouZ = " + rouZ);
-        System.out.println("longExpression = " + longExpression);
-        System.out.println("fFactor = " + fFactor);
-        System.out.println("intensity = " + intensity);
 
         // Return a per Angstrom value
-        return intensity / wavelengthWidth;
+        return integratedIntensity;
     }
 
     /**
@@ -132,8 +121,8 @@ public class EbelCalculation extends SourceCalculation {
 
     /**
      * Method calculates intensities of the characteristic lines of the x-ray tube.
-     * Intensity is returned as a per Angstrom. The natural width of the line is
-     * used to get this per Angstrom value.
+     * spectrum. Intensity is stored as the total intensity of the line together
+     * with a width which is the natural width of the line.
      * @param inParameters reference to parameters input via GUI.
      * @param outputData an XraySpectrum object containing the calculated values.
      */
@@ -194,11 +183,11 @@ public class EbelCalculation extends SourceCalculation {
                         double evwidth = lineInfo.getLineWidth();
                         // Calculate line width in Angstrom
                         double lineWidth = getLineWidth(lineInfo.getEnergy(), evwidth);
-                        // Convert line integrated intensity to per Angstrom value
+                        // Calculate according to formula
                         double intensity = constK * sPowFactor * r * omegaJK * pJKL * fFunction;
-                        
+
                         // Store calculated value
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity));
                     }
                 });
 
@@ -259,8 +248,8 @@ public class EbelCalculation extends SourceCalculation {
                         // Calculate line intensity
                         double intensity = constX * sPowFactor * r * omegaJK * pJKL * fFunction;
                         
-                        // Store calculated intensity converted to a per angstrom value
-                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity / lineWidth));
+                        // Store calculated intensity
+                        allLines.add(new SpectrumPart(wavelength, lineWidth, intensity));
                     }
                 });
         // Sort lines in wavelength order and add to output data

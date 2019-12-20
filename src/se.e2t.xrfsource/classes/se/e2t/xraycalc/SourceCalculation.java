@@ -207,9 +207,9 @@ public abstract class SourceCalculation {
      * calculates continuum intensities.
      * 
      * @param inParameters reference to parameters input via GUI.
-     * @param wavelength wavelength in Angstrom.
+     * @param wavelength center wavelength in Angstrom.
      * @param wavelengthWidth width of the wavelegth slice to be calculated (Angstrom).
-     * @return calculated intensity per Angstrom value.
+     * @return total calculated intensity within the wavelength interval.
      */
     protected abstract double getContiniumIntensity(Inparameters inParameters,
             double wavelength, double wavelengthWidth);
@@ -218,8 +218,9 @@ public abstract class SourceCalculation {
     /**
      * This method which is implemented by the classes extending this class
      * calculates intensities of the characteristic lines of the x-ray tube.
-     * Intensity is returned as a per Angstrom. The natural width of the line is
-     * used to get this per Angstrom value.
+     * Intensity is returned as an integrated intensity within a wavelength
+     * interval. The interval width of each calculated intensity is equal to
+     * the natural width of the line.
      * 
      * @param inParameters reference to parameters input via GUI.
      * @param outputData an Xraypectrum object containing the calculated values.
@@ -339,7 +340,7 @@ public abstract class SourceCalculation {
         
         // Get max integrated tube line intensity
         double mPeak = outputData.getTubeLines().stream()
-                .map(sPart -> sPart.getIntensity() * sPart.getWindow())
+                .map(sPart -> sPart.getIntensity())
                 .max(Double::compare)
                 .get();
         
