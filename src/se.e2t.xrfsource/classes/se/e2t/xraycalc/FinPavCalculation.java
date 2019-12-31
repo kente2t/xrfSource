@@ -147,8 +147,6 @@ public class FinPavCalculation extends SourceCalculation {
         double r3 = (0.887d * u * u * u -3.44d * u *u + 9.33d * u - 6.43d) /
                 (u* u * u);
         double rFactor = r1 - r2 * Math.log(r3 * (double) z + 25.0d);
-        System.out.println("\nr1 = " + r1 + " r2 = " + r2 + " r3 = " +r3 +
-                " u = " + u + " rFactor = " + rFactor);
         return rFactor;
     }
     
