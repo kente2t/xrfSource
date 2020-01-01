@@ -69,6 +69,7 @@ import static se.e2t.xraycalc.Inparameters.getAnodeElements;
 import static se.e2t.xraycalc.Inparameters.getWindowElements;
 import se.e2t.xraycalc.NistCalculation;
 import se.e2t.xraycalc.SpectrumFileWriter;
+import static se.e2t.xraygui.Guistart.PROG_TITLE_STRING;
 import se.e2t.xrfsource.spectrumclasses.XraySpectrum;
 import se.e2t.xraymisc.OpenSaveParameters;
 import se.e2t.xrfsource.format.spi.SpectrumFormatSPI;
@@ -427,6 +428,7 @@ public class XraySourceGuiMainController implements Initializable {
 
         // Load dialog GUI
         Scene scene = new Scene(root);
+        dialog.setTitle("Specify filter contents");
         dialog.setScene(scene);
         dialog.show();
     }
