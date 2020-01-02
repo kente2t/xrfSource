@@ -34,9 +34,9 @@ import java.util.Optional;
  * Data of this static class is according to This paper:
  * Authors: J.H Hubbell, P.N. Trehan, Nirmal Singh, B. Chand, D. Metha, L. Garg,
  * R.R. Garg, Surinder Singh, S. Puri
- * Title: A Review, Bibliographu, and Tabulation of K, L, and higher Atomic
+ * Title: A Review, Bibliography, and Tabulation of K, L, and higher Atomic
  * Shell X-Ray Flourescence Yields
- * Journal: Journal of Physical and Chemical Refernece Data 23, 339-364 (1994).
+ * Journal: Journal of Physical and Chemical Reference Data 23, 339-364 (1994).
  * 
  * The L shell yields tabulated are averaged yields för L1, L2 and L3.
  */

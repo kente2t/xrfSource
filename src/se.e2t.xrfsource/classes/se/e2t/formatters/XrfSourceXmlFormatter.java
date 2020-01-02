@@ -102,7 +102,7 @@ public class XrfSourceXmlFormatter implements SpectrumFormatSPI {
             doc.setXmlStandalone(true); // To be able to control validation later
 
             // Add a comment
-            Comment comm = doc.createComment("This parameter file "
+            Comment comm = doc.createComment("This intensity file "
                     + "was created by program xrfSource " + new Date());
             doc.appendChild(comm);
 
