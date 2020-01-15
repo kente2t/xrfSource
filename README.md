@@ -11,4 +11,4 @@ Tools used for the development:
 * OpenJFX version 11.0.2 (Java FX for the GUI development)
 * Gluon JavaFX Screen Builder version 11.0.0 (GUI for development of the progran Java FX based GUI).
 
-Executables of the program in versions for Windows and Linux can be downloaded via [a link](http://www.e2t.se/download).
+Executables of the program in versions for Windows and Linux can be downloaded via [a link](http://www.e2t.se/xrfsource/download).
