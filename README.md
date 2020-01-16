@@ -1,5 +1,5 @@
 # xrfSource
-XrfSource is a Java program to calculate the x-ray intensity distribution of an x-ray tube.
+XrfSource is a Java program to calculate the x-ray intensity distribution of an x-ray tube. This spectrum information is required by software which evaluate x-ray flourescence measurements according to the fundamental parameter method.
 
 The program implements a number of wellknown algorithms for the calculation of the intensity spectrum sent from an x-ray tube.
 The program is a modular Java program, the new Java concept started with Java 9. The executable is self contained, so additional
